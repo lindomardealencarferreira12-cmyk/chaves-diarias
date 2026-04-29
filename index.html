@@ -235,24 +235,32 @@
             margin-top: 5px;
         }
         
-        .construction-ribbon {
+        .ribbon-corner {
             position: fixed;
-            top: 60px;
-            left: -90px;
-            width: 450px;
+            top: 0;
+            left: 0;
+            width: 160px;
+            height: 160px;
+            overflow: hidden;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .ribbon-corner .construction-ribbon {
+            position: absolute;
+            top: 35px;
+            left: -42px;
+            width: 200px;
             background: #FFEA00;
-            color: #000;
+            color: #111;
             font-family: var(--font-title);
             font-weight: 900;
-            font-size: 0.85rem;
-            padding: 12px 0;
+            font-size: 0.78rem;
+            padding: 9px 0;
             transform: rotate(-45deg);
-            z-index: 9999;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
-            letter-spacing: 2px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             text-align: center;
-            pointer-events: none;
         }
         .nav-right {
             grid-column: 3;
@@ -919,7 +927,9 @@
     </style>
 </head>
 <body>
-    <div class="construction-ribbon">Site em Construção</div>
+    <div class="ribbon-corner">
+        <div class="construction-ribbon">Site em Construção</div>
+    </div>
 
     <!-- NAV -->
     <nav>
