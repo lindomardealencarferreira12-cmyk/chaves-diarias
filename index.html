@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chaves Diárias De Sabedoria Revelada | L. A. Ferreira</title>
+    <title>Sabedoria Revelada - Uma Chave Por Dia | L. A. Ferreira</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -217,7 +217,7 @@
         }
         .logo {
             font-family: var(--font-title);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--text-main);
             text-decoration: none;
             font-weight: 800;
@@ -228,8 +228,32 @@
             left: 50%;
             transform: translateX(-50%);
             width: max-content;
+            line-height: 1.2;
         }
-        .logo span { color: var(--gold); }
+        .logo span { 
+            color: var(--gold); 
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+        }
+        
+        .construction-ribbon {
+            position: fixed;
+            top: 35px;
+            left: -45px;
+            background: #FFD700;
+            color: #000;
+            font-family: var(--font-title);
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 8px 50px;
+            transform: rotate(-45deg);
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            pointer-events: none;
+        }
         .nav-right {
             margin-left: auto;
             display: flex;
@@ -893,11 +917,12 @@
     </style>
 </head>
 <body>
+    <div class="construction-ribbon">Site em Construção</div>
 
     <!-- NAV -->
     <nav>
         <div class="container nav-content">
-            <a href="#" class="logo" style="font-size: 1.1rem; line-height: 1.2; text-transform: uppercase;">Chaves Diárias de<br><span>Sabedoria Revelada</span></a>
+            <a href="#" class="logo">Sabedoria Revelada<br><span>Uma chave por dia</span></a>
             <div class="nav-right">
                 <div class="lang-switcher">
                     <a href="index.html" class="active"><img src="https://flagcdn.com/w20/br.png" alt="PT" width="16"> PT</a> <span class="lang-divider">|</span> 
