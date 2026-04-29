@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sabedoria Revelada - Uma Chave Por Dia | L. A. Ferreira</title>
+    <title>Sabedoria Revelada - Uma Chave Por Dia</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -206,18 +206,28 @@
             -webkit-backdrop-filter: blur(15px);
             z-index: 1000;
             border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-            padding: 1rem 0;
+            padding: 1.2rem 0;
             transition: all 0.4s ease;
         }
+        nav .container {
+            max-width: 1500px;
+            padding: 0 3rem;
+        }
         .nav-content {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            width: 100%;
+        }
+        .nav-content::before {
+            content: '';
+            flex: 1;
         }
         .logo {
-            grid-column: 2;
+            flex: 0 0 auto;
+            text-align: center;
             font-family: var(--font-title);
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             color: var(--text-main);
             text-decoration: none;
             font-weight: 800;
@@ -252,9 +262,9 @@
             text-transform: uppercase;
         }
         .nav-right {
-            grid-column: 3;
-            justify-self: end;
+            flex: 1;
             display: flex;
+            justify-content: flex-end;
             align-items: center;
             gap: 1.5rem;
         }
@@ -862,11 +872,13 @@
             .pricing-box { padding: 4rem 2rem; }
         }
         @media (max-width: 768px) {
+            .nav-content::before { display: none; }
+            nav .container { padding: 0 1.5rem; }
             .nav-btn { display: none; }
-            .nav-content { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
-            .logo { font-size: 1.8rem; width: 100%; margin-top: 5px; }
+            .nav-content { display: flex; flex-direction: column; justify-content: center; gap: 8px; position: static; }
+            .logo { position: static; transform: none; font-size: 2rem; width: 100%; margin-top: 5px; }
             .logo span { font-size: 1.2rem; }
-            .nav-right { margin-left: 0; }
+            .nav-right { margin-left: 0; justify-content: center; width: 100%; margin-bottom: 5px; }
             .lang-switcher { font-size: 0.85rem; }
             .back-to-top {
                 bottom: 100px;
@@ -921,7 +933,7 @@
     <!-- NAV -->
     <nav>
         <div class="container nav-content">
-            <a href="#" class="logo">Chaves Diárias de Sabedoria<br><span>L. A. Ferreira</span></a>
+            <a href="#" class="logo">Sabedoria Revelada<br><span>Uma Chave Por Dia</span></a>
             <div class="nav-right">
                 <div class="lang-switcher">
                     <a href="index.html" class="active"><img src="https://flagcdn.com/w20/br.png" alt="PT" width="16"> PT</a> <span class="lang-divider">|</span> 

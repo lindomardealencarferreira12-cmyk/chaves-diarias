@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sabiduría Revelada - Una Llave Por Día | L. A. Ferreira</title>
+    <title>Sabiduría Revelada - Una Llave Por Día</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -206,18 +206,28 @@
             -webkit-backdrop-filter: blur(15px);
             z-index: 1000;
             border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-            padding: 1rem 0;
+            padding: 1.2rem 0;
             transition: all 0.4s ease;
         }
+        nav .container {
+            max-width: 1500px;
+            padding: 0 3rem;
+        }
         .nav-content {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            width: 100%;
+        }
+        .nav-content::before {
+            content: '';
+            flex: 1;
         }
         .logo {
-            grid-column: 2;
+            flex: 0 0 auto;
+            text-align: center;
             font-family: var(--font-title);
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             color: var(--text-main);
             text-decoration: none;
             font-weight: 800;
@@ -252,9 +262,9 @@
             text-transform: uppercase;
         }
         .nav-right {
-            grid-column: 3;
-            justify-self: end;
+            flex: 1;
             display: flex;
+            justify-content: flex-end;
             align-items: center;
             gap: 1.5rem;
         }
@@ -862,11 +872,13 @@
             .pricing-box { padding: 4rem 2rem; }
         }
         @media (max-width: 768px) {
+            .nav-content::before { display: none; }
+            nav .container { padding: 0 1.5rem; }
             .nav-btn { display: none; }
-            .nav-content { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
-            .logo { font-size: 1.8rem; width: 100%; margin-top: 5px; }
+            .nav-content { display: flex; flex-direction: column; justify-content: center; gap: 8px; position: static; }
+            .logo { position: static; transform: none; font-size: 2rem; width: 100%; margin-top: 5px; }
             .logo span { font-size: 1.2rem; }
-            .nav-right { margin-left: 0; }
+            .nav-right { margin-left: 0; justify-content: center; width: 100%; margin-bottom: 5px; }
             .lang-switcher { font-size: 0.85rem; }
             .back-to-top {
                 bottom: 100px;
@@ -921,14 +933,14 @@
     <!-- NAV -->
     <nav>
         <div class="container nav-content">
-            <a href="#" class="logo">Sabiduría Revelada<br><span>Una llave por día</span></a>
+            <a href="#" class="logo">Sabiduría Revelada<br><span>Una Llave Al Día</span></a>
             <div class="nav-right">
                 <div class="lang-switcher">
                     <a href="index.html"><img src="https://flagcdn.com/w20/br.png" alt="PT" width="16"> PT</a> <span class="lang-divider">|</span> 
                     <a href="index-en.html"><img src="https://flagcdn.com/w20/us.png" alt="EN" width="16"> EN</a> <span class="lang-divider">|</span> 
                     <a href="index-es.html" class="active"><img src="https://flagcdn.com/w20/es.png" alt="ES" width="16"> ES</a>
                 </div>
-                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn nav-btn">Suscribirse Ahora</a>
+                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn nav-btn">Garantizar Acceso Gratuito</a>
             </div>
         </div>
     </nav>
@@ -936,16 +948,16 @@
     <!-- HERO -->
     <section class="hero" id="inicio">
         <div class="container reveal">
-            <div class="urgency-badge">Acceso Gratuito hasta el 10 de Mayo</div>
+            <div class="urgency-badge">⚠ El acceso gratuito finaliza el 10 de mayo — después de eso, solo suscriptores</div>
             
             <img src="key.png" alt="Llave Diaria de Sabiduría Revelada" class="cinematic-key">
             
-            <h1>La sabiduría que <span class="text-gradient">confronta tu dolor.</span></h1>
-            <p class="subtitle">La fe se estancó. El dolor permaneció. La teología superficial falló. Necesitas una palabra que transforme.</p>
+            <h1>Una llave al día puede abrir lo que <span class="text-gradient">años de oración no lograron.</span></h1>
+            <p class="subtitle">No es un devocional común. Es una llave excavada de la Palabra con un método real — entregada cada día, directamente en tu correo.</p>
             
             <div class="hero-buttons">
-                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn btn-pulse">Garantizar Acceso Gratuito</a>
-                <a href="#amostras" class="btn btn-outline">Leer Muestras</a>
+                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn btn-pulse">Quiero recibir las llaves diarias</a>
+                <a href="#amostras" class="btn btn-outline">Ver ejemplos reales antes de suscribirme</a>
             </div>
         </div>
     </section>
@@ -954,10 +966,10 @@
     <section class="perguntas">
         <div class="container">
             <div class="grid">
-                <div class="glass-card reveal delay-1">"¿Sientes que tu fe ha perdido profundidad?"</div>
-                <div class="glass-card reveal delay-2">"¿Necesitas dirección, pero repudias los clichés motivacionales?"</div>
-                <div class="glass-card reveal delay-3">"¿Cargas con culpa, vergüenza o un dolor no resuelto?"</div>
-                <div class="glass-card reveal delay-1">"¿Lees la Biblia y no sabes cómo aplicarla a tu crisis?"</div>
+                <div class="glass-card reveal delay-1">"¿Comienzas el día sin dirección y lo terminas sin saber qué quería mostrarte Dios?"</div>
+                <div class="glass-card reveal delay-2">"¿Lees la Biblia, pero rara vez algo se queda — algo que cambie tu forma de pensar o actuar?"</div>
+                <div class="glass-card reveal delay-3">"¿Cargas con culpas que sientes que Dios aún te está cobrando — incluso sabiendo de la gracia?"</div>
+                <div class="glass-card reveal delay-1">"¿Está tu fe estancada y sientes que necesitas algo que vaya más allá de lo superficial?"</div>
             </div>
         </div>
     </section>
@@ -966,25 +978,25 @@
     <section class="promessa" id="promessa">
         <div class="container">
             <span class="section-label reveal">Lo que vas a recibir</span>
-            <h2 class="section-title reveal">El Método</h2>
-            <p class="section-subtitle reveal">Cada mañana, una nueva perspectiva espiritual depositada en tu correo electrónico.</p>
+            <h2 class="section-title reveal">Lo que vas a recibir</h2>
+            <p class="section-subtitle reveal">Cada devocional nace de un texto bíblico específico — excavado hasta las capas que la lectura común no ve. Corto. Directo. Irreversible.</p>
             
             <div class="grid">
                 <div class="glass-card reveal delay-1">
-                    <h3>Profundidad Bíblica</h3>
-                    <p>Sin atajos. Sin verdades a medias. El texto sagrado extraído con el rigor exegético y la fuerza que necesitas para levantarte.</p>
+                    <h3>Profundidad Bíblica Real</h3>
+                    <p>Capas culturales, lingüísticas e históricas que la lectura común nunca alcanza.</p>
                 </div>
                 <div class="glass-card reveal delay-2">
-                    <h3>Lenguaje Que Confronta</h3>
-                    <p>La palabra correcta no te acaricia. Te despierta. Rompe las cadenas de la acomodación y expone la raíz de tu estancamiento.</p>
+                    <h3>Lenguaje que Confronta</h3>
+                    <p>Frases cortas, ritmo intencional. Impacto que permanece después de cerrar la pantalla.</p>
                 </div>
                 <div class="glass-card reveal delay-3">
-                    <h3>Aplicación Práctica</h3>
-                    <p>El dolor de hoy exige la sabiduría de ayer. Principios eternos traducidos para las crisis inmediatas de tu vida cotidiana.</p>
+                    <h3>Aplicación para Hoy</h3>
+                    <p>Una pregunta al final de cada texto que no te deja salir igual que como entraste.</p>
                 </div>
                 <div class="glass-card reveal delay-1">
-                    <h3>Entrega Diaria</h3>
-                    <p>La consistencia forja el carácter. Cada mañana, un nuevo devocional en tu bandeja de entrada. Una nueva arma para la batalla del día.</p>
+                    <h3>Entregado Cada Día</h3>
+                    <p>Directo en tu correo. Lectura de 3 a 5 minutos. Impacto para 24 horas.</p>
                 </div>
             </div>
         </div>
@@ -993,9 +1005,9 @@
     <!-- AMOSTRAS REAIS -->
     <section class="amostras" id="amostras">
         <div class="container">
-            <span class="section-label reveal">Lee antes de suscribirte</span>
-            <h2 class="section-title reveal">Muestras Reales</h2>
-            <p class="section-subtitle reveal">Fragmentos exactos de lo que recibirás. Sin filtros. Sin superficialidad.</p>
+            <span class="section-label reveal">Sumérgete en el contenido</span>
+            <h2 class="section-title reveal">Lee antes de suscribirte</h2>
+            <p class="section-subtitle reveal">Cinco llaves reales — probadas en el texto. Lo que recibes cada día tiene este nivel.</p>
             
             <div class="amostra-wrapper">
                 <div class="amostra-card reveal">
@@ -1030,12 +1042,12 @@
     <section class="diferencial">
         <div class="container">
             <span class="section-label reveal">Por qué es diferente</span>
-            <h2 class="section-title reveal">Lo que esto <span>NO</span> es.</h2>
+            <h2 class="section-title reveal">Esto no es para animarte.</h2>
             <ul class="diferencial-list">
-                <li class="reveal delay-1">No es contenido motivacional.</li>
-                <li class="reveal delay-2">No es teología superficial.</li>
-                <li class="reveal delay-3">No es producción en serie.</li>
-                <li class="highlight reveal delay-1">Es exégesis real con lenguaje que llega donde duele la vida.</li>
+                <li class="reveal delay-1">No es una lectura rápida sin profundidad — cada texto conlleva investigación teológica real.</li>
+                <li class="reveal delay-2">No es motivación vacía — cada llave confronta antes de consolar.</li>
+                <li class="reveal delay-3">No es genérico — cada devocional nace de un texto bíblico específico, excavado hasta capas que la lectura común no ve.</li>
+                <li class="highlight reveal delay-1">No es producción en serie — cada llave lleva la voz de alguien que pasó décadas estudiando la Palabra y la vida humana.</li>
             </ul>
             
             <div class="central-phrase reveal">
@@ -1052,9 +1064,9 @@
                 <div class="autor-text reveal delay-1">
                     <span class="section-label reveal" style="text-align: left; margin-bottom: 0.5rem;">Quién escribe</span>
                     <h2>L. A. <span>Ferreira</span></h2>
-                    <p>Pastor por más de 20 años, teólogo y terapeuta. Conoce el texto bíblico. Conoce las fracturas del alma humana.</p>
+                    <p>Pastor durante más de 20 años, teólogo y terapeuta. Una combinación rara — porque cada devocional lleva no solo exégesis, sino una comprensión real de cómo la Palabra toca el comportamiento humano.</p>
                     <p>Fundador de la Iglesia Bautista de la Restauración y de la escuela bíblica EFATEL. Autor y conferencista.</p>
-                    <p>Su escritura no viene solo de estudios de gabinete. Nace en las trincheras del asesoramiento pastoral, tratando dolores invisibles y restaurando destinos destruidos.</p>
+                    <p>Cada llave diaria nace en la misma mesa donde convergen sermones, clases y sesiones terapéuticas. No es teoría. Es la Palabra probada en el dolor real de las personas.</p>
                 </div>
             </div>
         </div>
@@ -1092,15 +1104,15 @@
                 
                 <!-- Pricing -->
                 <span class="section-label reveal">Acceso</span>
-                <h3 class="price-title">Suscripción Mensual</h3>
+                <h3 class="price-title">Una llave al día. Por menos de un café.</h3>
                 <div class="price">$10<span>/mes</span></div>
-                <p style="color: var(--gold-bright); font-size: 1.2rem; font-weight: bold; margin-top: -1.5rem; margin-bottom: 2.5rem; font-style: italic;">(Menos que un café al día)</p>
+                <p style="color: var(--gold-bright); font-size: 1.2rem; font-weight: bold; margin-top: -1.5rem; margin-bottom: 2.5rem; font-style: italic;">(Apenas $0.33 por día)</p>
                 
                 <ul class="pricing-features">
-                    <li>1 Devocional inédito y profundo al día</li>
-                    <li>Entrega directa a tu correo vía Substack</li>
+                    <li>1 Devocional inédito y profundo por día</li>
+                    <li>Entrega directa en tu correo vía Substack</li>
                     <li>Acceso integral a todo el archivo pasado</li>
-                    <li>Aplicación práctica y terapéutica de la Palabra</li>
+                    <li>Pregunta de reflexión al final de cada texto — que cambia tu forma de actuar</li>
                 </ul>
                 
                 <!-- CTA Final -->
@@ -1108,7 +1120,7 @@
                     <a href="SEU_LINK_SUBSTACK_AQUI" class="btn btn-pulse" style="width: 100%; font-size: 1.4rem;">Quiero Suscribirme Ahora</a>
                     <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 8px; color: #25d366;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>
-                        <p style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-style: normal;"><strong>Cero Riesgo.</strong> <span style="color: var(--text-muted);">Cancela cuando quieras.</span></p>
+                        <p style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-style: normal;"><strong>Sin contratos.</strong> <span style="color: var(--text-muted);">Sin permanencia. Cancela cuando quieras con un clic.</span></p>
                     </div>
                 </div>
             </div>
@@ -1122,16 +1134,20 @@
             <span class="section-label reveal">Dudas</span>
             <h2 class="section-title reveal">Preguntas <span>Frecuentes</span></h2>
             <div class="faq-item reveal delay-1">
-                <h4>¿Cómo recibiré los devocionales?</h4>
-                <p>Todos los días por la mañana, el devocional inédito llegará directamente a la bandeja de entrada del correo que registres al suscribirte.</p>
+                <h4>¿Cómo y cuándo recibiré los devocionales?</h4>
+                <p>Cada mañana, el devocional llega directo al correo que registraste. Solo ábrelo y lee — 3 a 5 minutos que valen el día.</p>
             </div>
             <div class="faq-item reveal delay-2">
-                <h4>¿Hay algún período de permanencia?</h4>
+                <h4>¿Hay algún período de fidelidad?</h4>
                 <p>No. La suscripción es mensual y tienes el control total. Puedes cancelar en cualquier momento con un solo clic, sin burocracia.</p>
             </div>
             <div class="faq-item reveal delay-3">
                 <h4>¿Tendré acceso a los textos anteriores?</h4>
-                <p>¡Sí! Al suscribirte, desbloqueas inmediatamente todo el archivo de devocionales profundos ya publicados en la plataforma.</p>
+                <p>¡Sí! Al suscribirte, desbloqueas inmediatamente todo el archivo de devocionales profundos ya publicados anteriormente en la plataforma.</p>
+            </div>
+            <div class="faq-item reveal delay-1">
+                <h4>¿El contenido es para cualquier cristiano o solo para pastores y líderes?</h4>
+                <p>Para cualquier persona que toma la Palabra en serio. No necesitas formación teológica — necesitas hambre de algo más profundo que lo que ofrece el devocional común.</p>
             </div>
         </div>
     </section>
@@ -1139,14 +1155,14 @@
     <!-- FOOTER -->
     <footer>
         <div class="container">
-            <p>&copy; 2024 Llaves Diarias De Sabiduría Revelada por L. A. Ferreira. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Sabiduría Revelada — L. A. Ferreira. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <!-- STICKY CTA -->
     <div class="sticky-cta">
         <div class="container sticky-content">
-            <p class="sticky-text">La sabiduría que <span>confronta tu dolor.</span></p>
+            <p class="sticky-text">Una palabra al día. <span>Para el resto de tu vida.</span></p>
             <a href="SEU_LINK_SUBSTACK_AQUI" class="btn">Garantizar Acceso Gratuito</a>
         </div>
     </div>
