@@ -438,22 +438,22 @@
             z-index: 10;
         }
         .hero-img {
-            width: 350px;
-            max-width: 80vw;
+            width: 500px;
+            max-width: 90vw;
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
             animation: float-key 6s ease-in-out infinite;
             border-radius: 20px;
             mix-blend-mode: screen;
-            transform: rotate(90deg);
+            
             transition: filter 0.5s var(--ease), transform 0.5s var(--ease);
         }
         @keyframes float-key {
-            0%, 100% { transform: translateY(0) rotate(90deg); }
-            50% { transform: translateY(-15px) rotate(90deg); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
         .hero-key-wrapper:hover .hero-img {
             filter: drop-shadow(0 20px 40px rgba(229, 192, 123, 0.6));
-            transform: rotate(90deg) scale(1.05);
+            transform: scale(1.05);
         }
         .key-tooltip {
             background: rgba(255, 255, 255, 0.1);
@@ -585,10 +585,10 @@
                 Acesso gratuito encerra em 10 de maio
             </div>
             
-            <!-- MAKE SURE modern_abstract_key_1777507388626.png exists in your folder or it falls back to key.png -->
+            <!-- MAKE SURE horizontal_smoke_key_1777510824466.png exists in your folder or it falls back to key.png -->
             <a href="SEU_LINK_SUBSTACK_AQUI" class="hero-key-wrapper reveal delay-1">
-                <img src="modern_abstract_key_1777507388626.png" alt="Chave" class="hero-img" onerror="this.src='key.png'">
-                <div class="key-tooltip">Clique na chave e receba sua chave para hoje</div>
+                <img src="horizontal_smoke_key_1777510824466.png" alt="Chave" class="hero-img" onerror="this.src='key.png'">
+                <div class="key-tooltip">Clique na chave e pegue sua chave diária.</div>
             </a>
             
             <h1 class="reveal delay-2">Uma chave pode abrir o que <span>anos não conseguiram.</span></h1>
