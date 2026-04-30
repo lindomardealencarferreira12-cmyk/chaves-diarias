@@ -5,86 +5,395 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sabedoria Revelada - Uma Chave Por Dia</title>
     
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300..900;1,300..900&family=Playfair+Display:ital,wght@0,600..900;1,600..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+
     <style>
         :root {
-            --bg-base: #0A0806;
-            --bg-panel: #1A1510;
-            --gold: #C9A84C;
-            --gold-bright: #E8C97A;
-            --gold-dark: #8B6914;
-            --text-main: #F0E8D8;
-            --text-muted: #8A7A60;
-            --text-subtle: #5A4E38;
-            --font-title: 'Playfair Display', serif;
-            --font-body: 'Crimson Pro', serif;
+            --bg: #050505;
+            --text: #F2F2F2;
+            --text-muted: #888888;
+            --accent: #E5C07B; /* Minimal gold */
+            --surface: rgba(25, 25, 25, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            
+            --font-display: 'Instrument Serif', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            
+            --ease: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; overflow-x: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            line-height: 1.6;
-            font-size: 19px;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 100%, rgba(201, 168, 76, 0.05) 0%, transparent 40%);
-            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
         }
+
+        ::selection {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* LENIS SMOOTH SCROLL CSS */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; }
+        p { line-height: 1.6; font-size: 1.125rem; color: var(--text-muted); }
         
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5vw;
         }
 
-        section, nav, footer, .sticky-cta, .whatsapp-wrapper, .back-to-top { position: relative; z-index: 1; }
-
-        .section-label {
-            font-size: 0.75rem;
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 2rem 0;
+            z-index: 100;
+            mix-blend-mode: difference;
+            transition: padding 0.3s var(--ease);
+        }
+        nav.scrolled {
+            padding: 1rem 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            mix-blend-mode: normal;
+        }
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-left, .nav-right { flex: 1; display: flex; }
+        .nav-right { justify-content: flex-end; gap: 1rem; align-items: center; }
+        
+        .logo {
+            flex: 0 0 auto;
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            line-height: 1;
+            white-space: nowrap;
+        }
+        .logo span {
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
             letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 1rem;
             display: block;
-            text-align: center;
+            margin-top: 0.5rem;
+            color: var(--text-muted);
         }
 
-        /* Títulos */
-        h1, h2, h3, h4, .title {
-            font-family: var(--font-title);
+        .lang-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.5;
+            transition: opacity 0.3s var(--ease);
+        }
+        .lang-link:hover, .lang-link.active { opacity: 1; }
+
+        .btn-nav {
+            background: #fff;
+            color: #000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 0.85rem;
             font-weight: 700;
-            line-height: 1.1;
+            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+        }
+        .btn-nav:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
 
-        .text-gradient {
-            background: linear-gradient(135deg, #FFFFFF 0%, var(--gold) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 15vh;
+            position: relative;
+        }
+        
+        .hero-img {
+            width: 400px;
+            max-width: 90vw;
+            margin-bottom: -60px;
+            z-index: 1;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+            animation: float 6s ease-in-out infinite;
+            border-radius: 20px;
+            mix-blend-mode: screen;
         }
 
-        .highlight-text {
-            color: var(--gold-bright);
-            text-shadow: 0 0 20px rgba(201, 168, 76, 0.4);
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        /* Animações de Scroll */
+        .hero h1 {
+            font-size: clamp(4rem, 12vw, 10rem);
+            letter-spacing: -0.03em;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .hero h1 span {
+            display: block;
+            font-style: italic;
+            color: var(--accent);
+            opacity: 0.9;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: 2rem auto;
+            font-size: 1.25rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* BADGE */
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 3rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 2;
+            position: relative;
+        }
+        .badge-dot {
+            width: 8px; height: 8px;
+            background: #25d366;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #25d366;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 10rem 0;
+            position: relative;
+        }
+        
+        .section-header {
+            margin-bottom: 5rem;
+        }
+        .section-header h2 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            letter-spacing: -0.02em;
+        }
+
+        /* BENTO GRID */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+            grid-auto-rows: minmax(350px, auto);
+        }
+
+        .bento-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 3.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.6s var(--ease), background 0.6s var(--ease), border-color 0.6s var(--ease);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .bento-item:hover {
+            transform: translateY(-10px);
+            background: rgba(40, 40, 40, 0.8);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .bento-item.large { grid-column: span 8; }
+        .bento-item.small { grid-column: span 4; }
+        .bento-item.medium { grid-column: span 6; }
+
+        .bento-item h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .bento-icon {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            font-family: var(--font-display);
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* SAMPLES GRID */
+        .samples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+        
+        .sample-card {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            transition: border-color 0.4s var(--ease);
+        }
+        .sample-card:hover { border-top-color: var(--accent); }
+        .sample-card h4 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        /* PRICING */
+        .pricing {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .price-huge {
+            font-family: var(--font-display);
+            font-size: clamp(6rem, 15vw, 15rem);
+            line-height: 0.9;
+            margin: 2rem 0;
+            color: var(--accent);
+            text-shadow: 0 0 80px rgba(229, 192, 123, 0.2);
+        }
+        .price-sub {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .btn-huge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            color: #000;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 1.5rem 4rem;
+            border-radius: 100px;
+            text-decoration: none;
+            margin-top: 4rem;
+            transition: all 0.5s var(--ease);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+        }
+        .btn-huge::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--accent);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.5s var(--ease);
+            z-index: 1;
+            border-radius: 100px;
+        }
+        .btn-huge:hover::before { transform: scaleY(1); }
+        .btn-huge span { position: relative; z-index: 2; }
+        .btn-huge:hover { color: #000; box-shadow: 0 20px 50px rgba(229, 192, 123, 0.3); transform: translateY(-5px); }
+
+        /* FAQ */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 2.5rem 0;
+            cursor: pointer;
+            transition: border-color 0.3s var(--ease);
+        }
+        .faq-item:hover { border-color: rgba(255,255,255,0.2); }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-family: var(--font-display);
+            color: #fff;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s var(--ease), margin 0.5s var(--ease);
+            color: var(--text-muted);
+            padding-right: 2rem;
+            font-size: 1.2rem;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            margin-top: 1.5rem;
+        }
+        .faq-icon {
+            font-size: 2.5rem;
+            font-weight: 300;
+            transition: transform 0.5s var(--ease);
+            color: var(--accent);
+        }
+        .faq-item.active .faq-icon { transform: rotate(45deg); }
+
+        /* FOOTER */
+        footer {
+            padding: 5rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        /* REVEAL ANIMATIONS */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(60px);
+            transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
         }
         .reveal.active {
             opacity: 1;
@@ -94,1159 +403,247 @@
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
 
-        /* Botões */
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-dark) 100%);
-            color: var(--bg-base);
-            font-family: var(--font-title);
-            font-weight: 800;
-            font-size: 1.2rem;
-            padding: 1.2rem 3rem;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 10px 25px -5px rgba(201, 168, 76, 0.4);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
-            z-index: -1;
-            transition: opacity 0.3s ease;
-            opacity: 0;
-        }
-        .btn:hover::before { opacity: 1; }
-        .btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 35px -5px rgba(201, 168, 76, 0.6);
-            color: #000;
-        }
-
-        .btn-pulse {
-            animation: pulseGlow 2s infinite;
-        }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(201, 168, 76, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0); }
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            box-shadow: none;
-        }
-        .btn-outline::before { display: none; }
-        .btn-outline:hover {
-            background: rgba(201, 168, 76, 0.1);
-            color: var(--gold-bright);
-            box-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
-            transform: translateY(-3px);
-        }
-
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(201, 168, 76, 0.15);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 3rem 2rem;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 15px 35px -15px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        .glass-card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent);
-            transform: skewX(-20deg);
-            transition: 0.7s;
-        }
-        .glass-card:hover::after {
-            left: 150%;
-        }
-        .glass-card:hover {
-            border-color: rgba(201, 168, 76, 0.4);
-            background: rgba(201, 168, 76, 0.05);
-            transform: translateY(-10px);
-            box-shadow: 0 25px 45px -10px rgba(201, 168, 76, 0.2);
-        }
-
-        /* Layout */
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        section { padding: 8rem 0; position: relative; }
-
-        /* NAV */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            background: rgba(5, 4, 3, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-            padding: 1.2rem 0;
-            transition: all 0.4s ease;
-        }
-        nav .container {
-            max-width: 1500px;
-            padding: 0 3rem;
-        }
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        .nav-content::before {
-            content: '';
-            flex: 1;
-        }
-        .logo {
-            flex: 0 0 auto;
-            text-align: center;
-            font-family: var(--font-title);
-            font-size: 2.6rem;
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            text-align: center;
-            width: max-content;
-            line-height: 1.1;
-        }
-        .logo span { 
-            display: block;
-            color: var(--gold); 
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            margin-top: 5px;
-        }
-        
+        /* CONSTRUCTION RIBBON */
         .construction-badge {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #FFEA00;
-            color: #111;
-            font-family: var(--font-title);
-            font-weight: 900;
-            font-size: 0.85rem;
-            padding: 8px 16px;
-            border-radius: 4px;
-            z-index: 1001;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .nav-right {
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        .lang-switcher {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-family: var(--font-title);
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-        }
-        .lang-switcher a {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        .lang-switcher a img {
-            border-radius: 2px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
-        .lang-switcher a:hover, .lang-switcher a.active {
-            color: var(--gold-bright);
-            background: rgba(201, 168, 76, 0.1);
-        }
-        .lang-divider { color: rgba(255,255,255,0.1); }
-        .nav-btn {
-            padding: 0.6rem 1.5rem;
-            font-size: 0.9rem;
-            border-radius: 4px;
-            letter-spacing: 1px;
-        }
-
-        /* HERO */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding-top: 120px;
-            position: relative;
-            background: radial-gradient(circle at 50% 30%, rgba(201, 168, 76, 0.15) 0%, transparent 60%);
-        }
-        .urgency-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid var(--gold);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            color: var(--gold-bright);
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 3rem;
-            background: rgba(201, 168, 76, 0.1);
-            font-family: var(--font-title);
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
-            animation: pulseOpacity 2s infinite;
-        }
-        @keyframes pulseOpacity {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .hero h1 {
-            font-size: clamp(3rem, 7vw, 5.5rem);
-            margin-bottom: 2rem;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-            letter-spacing: -1px;
-            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-        .hero p.subtitle {
-            font-size: clamp(1.2rem, 2vw, 1.6rem);
-            color: var(--text-main);
-            margin-bottom: 3rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.5;
-            font-style: italic;
-            opacity: 0.9;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* SECTION HEADERS */
-        .section-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: var(--text-main);
-        }
-        .section-title span {
-            color: var(--gold);
-        }
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.4rem;
-            color: var(--text-muted);
-            margin-bottom: 5rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
-        }
-
-        /* PROMESSA */
-        .promessa .glass-card h3 {
-            color: var(--gold-bright);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        .promessa .glass-card p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-        }
-
-        /* AMOSTRAS REAIS */
-        .amostras {
-            background: linear-gradient(180deg, var(--bg-base) 0%, #0a0805 50%, var(--bg-base) 100%);
-            border-top: 1px solid rgba(201, 168, 76, 0.05);
-            border-bottom: 1px solid rgba(201, 168, 76, 0.05);
-        }
-        .amostra-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .amostra-card {
-            background: rgba(255, 255, 255, 0.01);
-            border-left: 3px solid var(--gold);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            position: relative;
-            transition: all 0.3s ease;
-            border-radius: 0 8px 8px 0;
-        }
-        .amostra-card:hover {
-            background: rgba(201, 168, 76, 0.03);
-            transform: translateX(10px);
-        }
-        .amostra-card::before {
-            content: '"';
-            position: absolute;
-            left: 20px;
-            top: 10px;
-            font-family: var(--font-title);
-            font-size: 5rem;
-            color: var(--gold);
-            opacity: 0.12;
-            line-height: 1;
-        }
-        .amostra-card h4 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--gold-bright);
-            position: relative;
-            z-index: 1;
-        }
-        .amostra-card p {
-            font-size: 1.25rem;
-            color: var(--text-main);
-            font-style: italic;
-            line-height: 1.8;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* DIFERENCIAL */
-        .diferencial-list {
-            list-style: none;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .diferencial-list li {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            padding-left: 3rem;
-            position: relative;
-            font-family: var(--font-title);
-            color: var(--text-muted);
-        }
-        .diferencial-list li::before {
-            content: "✕";
-            position: absolute;
-            left: 0;
-            color: rgba(201, 168, 76, 0.5);
-            font-size: 1.5rem;
-            line-height: 1.2;
-        }
-        .diferencial-list li.highlight {
-            color: var(--gold-bright);
-            margin-top: 3.5rem;
-            font-size: 2.2rem;
-            text-shadow: 0 0 15px rgba(201, 168, 76, 0.3);
-        }
-        .diferencial-list li.highlight::before {
-            content: "✓";
-            color: var(--gold);
-        }
-        
-        .central-phrase {
-            font-family: var(--font-title);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            color: var(--gold);
-            text-align: center;
-            margin-top: 6rem;
-            font-style: italic;
-            position: relative;
-            padding: 4rem 0;
-        }
-        .central-phrase::before, .central-phrase::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        }
-        .central-phrase::before { top: 0; }
-        .central-phrase::after { bottom: 0; }
-
-        /* AUTOR */
-        .autor {
-            display: flex;
-            align-items: center;
-            gap: 5rem;
-            flex-wrap: wrap;
-        }
-        .autor-img {
-            flex: 1;
-            min-width: 300px;
-            aspect-ratio: 3/4;
-            background: linear-gradient(135deg, rgba(201,168,76,0.2) 0%, rgba(5,4,3,1) 100%);
-            border: 1px solid rgba(201, 168, 76, 0.4);
-            border-radius: 8px;
-            position: relative;
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
-        }
-        .autor-img::after {
-            content: "L.A.F.";
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: var(--font-title);
-            font-size: 4rem;
-            color: rgba(201, 168, 76, 0.4);
-            letter-spacing: 8px;
-        }
-        .autor-text {
-            flex: 1.5;
-            min-width: 300px;
-        }
-        .autor-text h2 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-main);
-        }
-        .autor-text h2 span { color: var(--gold); }
-        .autor-text p {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        /* PERGUNTAS */
-        .perguntas .glass-card {
-            text-align: center;
-            font-family: var(--font-title);
-            font-size: 1.7rem;
-            font-style: italic;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 240px;
-            color: var(--text-main);
-            border-top: 3px solid var(--gold);
-        }
-        .perguntas .glass-card:hover {
-            color: var(--gold-bright);
-        }
-
-        /* PRICING & COUNTDOWN */
-        .pricing-section {
-            background: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
-            position: relative;
-        }
-        .pricing-box {
-            max-width: 650px;
-            margin: 0 auto;
-            background: rgba(10, 8, 6, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(201, 168, 76, 0.4);
-            border-radius: 16px;
-            padding: 5rem 4rem;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 40px rgba(201, 168, 76, 0.1);
-        }
-        .ribbon {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--gold);
-            color: var(--bg-base);
-            padding: 8px 30px;
-            font-family: var(--font-title);
-            font-weight: 800;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-radius: 4px;
-            box-shadow: 0 5px 15px rgba(201, 168, 76, 0.4);
-        }
-        
-        .countdown-container {
-            margin-bottom: 3.5rem;
-            padding-bottom: 2.5rem;
-            border-bottom: 1px solid rgba(201, 168, 76, 0.2);
-        }
-        .countdown-msg {
-            color: var(--text-main);
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-family: var(--font-title);
-        }
-        .countdown-msg span { color: var(--gold-bright); font-weight: 700; }
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-        }
-        .cd-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .cd-value {
-            font-family: var(--font-title);
-            font-size: 3.5rem;
-            color: var(--gold-bright);
-            line-height: 1;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 1.2rem;
-            border: 1px solid rgba(201, 168, 76, 0.3);
-            border-radius: 8px;
-            min-width: 90px;
-            text-shadow: 0 0 15px rgba(201, 168, 76, 0.3);
-            box-shadow: inset 0 0 20px rgba(201, 168, 76, 0.1);
-        }
-        .cd-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-top: 1rem;
-        }
-
-        .price-title {
-            font-family: var(--font-title);
-            color: var(--text-main);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .price {
-            font-family: var(--font-title);
-            font-size: 6rem;
-            color: var(--gold-bright);
-            line-height: 1;
-            margin-bottom: 2.5rem;
-            text-shadow: 0 5px 20px rgba(201, 168, 76, 0.3);
-        }
-        .price span {
-            font-size: 2rem;
-            color: var(--text-muted);
-            text-shadow: none;
-        }
-        .pricing-features {
-            list-style: none;
-            margin: 0 auto 3.5rem auto;
-            text-align: left;
-            max-width: 400px;
-        }
-        .pricing-features li {
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-            padding-left: 2.5rem;
-            position: relative;
-            color: var(--text-main);
-        }
-        .pricing-features li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--gold-bright);
-            font-weight: bold;
-            font-size: 1.5rem;
-            line-height: 1.2;
-        }
-
-        .cta-final p {
-            margin-top: 1.5rem;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Sticky CTA Bottom */
-        .sticky-cta {
-            position: fixed;
-            bottom: -120px;
-            left: 0;
-            right: 0;
-            background: rgba(5, 4, 3, 0.98);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 15px 0;
-            border-top: 1px solid rgba(201, 168, 76, 0.4);
-            z-index: 999;
-            transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
-        }
-        .sticky-cta.visible {
-            bottom: 0;
-        }
-        .sticky-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .sticky-text {
-            font-family: var(--font-title);
-            font-size: 1.4rem;
-            color: var(--text-main);
-            margin: 0;
-        }
-        .sticky-text span { color: var(--gold); }
-
-        /* FOOTER */
-        footer {
-            text-align: center;
-            padding: 4rem 0;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-muted);
-            font-size: 1rem;
-            background: #000;
-        }
-
-        /* BACK TO TOP BUTTON */
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 50px;
-            height: 50px;
-            background-color: rgba(201, 168, 76, 0.1);
-            color: var(--gold);
-            border: 1px solid rgba(201, 168, 76, 0.3);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 998;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-        }
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        .back-to-top:hover {
-            background-color: var(--gold);
-            color: var(--bg-base);
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(201, 168, 76, 0.4);
-        }
-
-        /* FAQ SECTION */
-        .faq-section {
-            background: linear-gradient(180deg, var(--bg-base) 0%, #0a0805 100%);
-            border-top: 1px solid rgba(201, 168, 76, 0.05);
-            padding-bottom: 5rem;
-        }
-        .faq-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(201, 168, 76, 0.1);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            transition: all 0.3s ease;
-        }
-        .faq-item:hover {
-            background: rgba(201, 168, 76, 0.05);
-            border-color: rgba(201, 168, 76, 0.3);
-        }
-        .faq-item h4 {
-            color: var(--gold-bright);
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            font-family: var(--font-title);
-        }
-        .faq-item p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        /* WHATSAPP FLOAT BUTTON */
-        .whatsapp-wrapper {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-        }
-        .whatsapp-text {
-            background-color: #FFF;
+            top: 30px;
+            left: -50px;
+            background: var(--accent);
             color: #000;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            padding: 8px 60px;
+            transform: rotate(-45deg);
+            font-size: 0.7rem;
             font-weight: 800;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            position: relative;
-            animation: bounce-msg 2s infinite;
-            font-family: var(--font-body);
-        }
-        .whatsapp-text::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            right: 20px;
-            border-width: 6px 6px 0;
-            border-style: solid;
-            border-color: #FFF transparent transparent transparent;
-        }
-        @keyframes bounce-msg {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .whatsapp-float {
-            width: 60px;
-            height: 60px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            animation: pulse-wa 2s infinite;
-        }
-        .whatsapp-float:hover {
-            background-color: #128C7E;
-            transform: scale(1.1);
-        }
-        @keyframes pulse-wa {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-        .whatsapp-float svg {
-            width: 35px;
-            height: 35px;
-            fill: #FFF;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            pointer-events: none;
         }
 
-        /* Responsividade */
-        @media (max-width: 900px) {
-            .autor { gap: 3rem; }
-            .pricing-box { padding: 4rem 2rem; }
+        /* MEDIA QUERIES */
+        @media (max-width: 1024px) {
+            .bento-item.large, .bento-item.small, .bento-item.medium { grid-column: span 12; }
+            .bento-grid { grid-auto-rows: auto; }
+            .bento-item { padding: 2.5rem; }
+            .section { padding: 6rem 0; }
         }
         @media (max-width: 768px) {
-            .nav-content::before { display: none; }
-            nav .container { padding: 0 1.5rem; }
-            .nav-btn { display: none; }
-            .nav-content { display: flex; flex-direction: column; justify-content: center; gap: 8px; position: static; }
-            .logo { position: static; transform: none; font-size: 2rem; width: 100%; margin-top: 5px; }
-            .logo span { font-size: 1.2rem; }
-            .nav-right { margin-left: 0; justify-content: center; width: 100%; margin-bottom: 5px; }
-            .lang-switcher { font-size: 0.85rem; }
-            .back-to-top {
-                bottom: 100px;
-                left: 20px;
-                width: 45px;
-                height: 45px;
-            }
-            .whatsapp-wrapper {
-                bottom: 100px;
-                right: 20px;
-            }
-            .whatsapp-float {
-                width: 55px;
-                height: 55px;
-            }
-            .whatsapp-float svg {
-                width: 30px;
-                height: 30px;
-            }
-            section { padding: 5rem 0; }
-            .hero h1 { font-size: 3rem; }
-            .price { font-size: 4.5rem; }
-            .section-title { font-size: 2.8rem; }
-            .countdown { gap: 0.8rem; }
-            .cd-value { font-size: 2.2rem; min-width: 70px; padding: 1rem; }
-            .amostra-card { padding: 1.5rem; }
-            .amostra-card::before { left: 5px; top: -20px; font-size: 4rem; }
-            .sticky-text { display: none; }
-            .sticky-content { justify-content: center; }
-            .sticky-cta .btn { width: 100%; }
-            .btn { width: 100%; padding: 1.2rem; }
-            .hero-buttons { flex-direction: column; width: 100%; }
-            .central-phrase { font-size: 2rem; }
-        }
-
-        .cinematic-key {
-            max-width: 150px;
-            margin: 0 auto 2rem auto;
-            display: block;
-            filter: drop-shadow(0 0 30px rgba(201, 168, 76, 0.4)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-            animation: float-key 4s ease-in-out infinite;
-        }
-        @keyframes float-key {
-            0%, 100% { transform: translateY(0) rotate(-2deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
+            .nav-content { flex-direction: column; gap: 1rem; }
+            .nav-right { justify-content: center; width: 100%; }
+            .btn-nav { display: none; }
+            .hero-img { width: 300px; margin-bottom: -40px; }
+            .faq-question { font-size: 1.5rem; }
+            nav { padding: 1rem 0; }
         }
     </style>
 </head>
 <body>
-    <div class="construction-badge">Site em Construção</div>
 
-    <!-- NAV -->
-    <nav>
+    <div class="construction-badge">Em Construção</div>
+
+    <nav id="navbar">
         <div class="container nav-content">
+            <div class="nav-left"></div>
             <a href="#" class="logo">Sabedoria Revelada<br><span>Uma Chave Por Dia</span></a>
             <div class="nav-right">
-                <div class="lang-switcher">
-                    <a href="index.html" class="active"><img src="https://flagcdn.com/w20/br.png" alt="PT" width="16"> PT</a> <span class="lang-divider">|</span> 
-                    <a href="index-en.html"><img src="https://flagcdn.com/w20/us.png" alt="EN" width="16"> EN</a> <span class="lang-divider">|</span> 
-                    <a href="index-es.html"><img src="https://flagcdn.com/w20/es.png" alt="ES" width="16"> ES</a>
-                </div>
-                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn nav-btn">Garantir Acesso Gratuito</a>
+                <a href="index.html" class="lang-link active">PT</a>
+                <a href="index-en.html" class="lang-link">EN</a>
+                <a href="index-es.html" class="lang-link">ES</a>
+                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn-nav">Acesso Gratuito</a>
             </div>
         </div>
     </nav>
 
-    <!-- HERO -->
     <section class="hero" id="inicio">
-        <div class="container reveal">
-            <div class="urgency-badge">⚠ Acesso gratuito encerra em 10 de maio — depois disso, apenas assinantes</div>
+        <div class="container">
+            <div class="badge reveal">
+                <div class="badge-dot"></div>
+                Acesso gratuito encerra em 10 de maio
+            </div>
             
-            <img src="key.png" alt="Chave Diária de Sabedoria Revelada" class="cinematic-key">
+            <!-- MAKE SURE modern_abstract_key_1777507388626.png exists in your folder or it falls back to key.png -->
+            <img src="modern_abstract_key_1777507388626.png" alt="Chave de Sabedoria" class="hero-img reveal delay-1" onerror="this.src='key.png'">
             
-            <h1>Uma chave por dia pode abrir o que <span class="text-gradient">anos de oração não conseguiram.</span></h1>
-            <p class="subtitle">Não é devocional comum. É uma chave escavada da Palavra com método real — entregue todo dia, diretamente no seu e-mail.</p>
+            <h1 class="reveal delay-2">Uma chave pode abrir o que <span>anos não conseguiram.</span></h1>
+            <p class="reveal delay-3">Não é um devocional comum. É uma chave escavada da Palavra com método real — entregue todo dia, diretamente no seu e-mail.</p>
+        </div>
+    </section>
+
+    <!-- BENTO BOX PROMISE -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>O que você vai receber.</h2>
+            </div>
             
-            <div class="hero-buttons">
-                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn btn-pulse">Quero receber as chaves diárias</a>
-                <a href="#amostras" class="btn btn-outline">Ver exemplos reais antes de assinar</a>
+            <div class="bento-grid">
+                <div class="bento-item large reveal">
+                    <div class="bento-icon">01</div>
+                    <div>
+                        <h3>Profundidade Real</h3>
+                        <p>Camadas culturais, linguísticas e históricas que a leitura comum nunca alcança. Mergulhe no texto original de forma acessível e direta.</p>
+                    </div>
+                </div>
+                
+                <div class="bento-item small reveal delay-1">
+                    <div class="bento-icon">02</div>
+                    <div>
+                        <h3>Linguagem que Confronta</h3>
+                        <p>Frases curtas. Ritmo intencional. Impacto que permanece depois que a tela apaga.</p>
+                    </div>
+                </div>
+                
+                <div class="bento-item medium reveal delay-2">
+                    <div class="bento-icon">03</div>
+                    <div>
+                        <h3>Aplicação Imediata</h3>
+                        <p>Uma pergunta incisiva ao final de cada texto que não te deixa sair igual de como entrou.</p>
+                    </div>
+                </div>
+                
+                <div class="bento-item medium reveal delay-3">
+                    <div class="bento-icon">04</div>
+                    <div>
+                        <h3>Entregue Todo Dia</h3>
+                        <p>Direto no e-mail. Leitura de 3 a 5 min. Impacto para 24 horas. Disciplina sem esforço.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- PERGUNTAS DE IDENTIFICAÇÃO -->
-    <section class="perguntas">
+    <!-- SAMPLES -->
+    <section class="section" style="background: #090909; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
         <div class="container">
-            <div class="grid">
-                <div class="glass-card reveal delay-1">"Você começa o dia sem direção e termina sem saber o que Deus queria te mostrar?"</div>
-                <div class="glass-card reveal delay-2">"Você lê a Bíblia, mas raramente algo fica — algo que mude a forma de pensar ou agir?"</div>
-                <div class="glass-card reveal delay-3">"Você carrega culpas que sente que Deus ainda está cobrando — mesmo já sabendo da graça?"</div>
-                <div class="glass-card reveal delay-1">"Sua fé está estagnada e você sente que precisa de algo que vá além do superficial?"</div>
+            <div class="section-header reveal">
+                <h2>Amostras Reais</h2>
+                <p style="font-size: 1.5rem; margin-top: 1rem;">Cinco chaves reais provadas no texto. Este é o nível do que você recebe.</p>
             </div>
-        </div>
-    </section>
-
-    <!-- PROMESSA -->
-    <section class="promessa" id="promessa">
-        <div class="container">
-            <span class="section-label reveal">O que você vai receber</span>
-            <h2 class="section-title reveal">O que você vai receber</h2>
-            <p class="section-subtitle reveal">Cada devocional nasce de um texto bíblico específico — escavado até as camadas que a leitura comum não vê. Curto. Direto. Irreversível.</p>
             
-            <div class="grid">
-                <div class="glass-card reveal delay-1">
-                    <h3>Profundidade Bíblica Real</h3>
-                    <p>Camadas culturais, linguísticas e históricas que a leitura comum nunca alcança.</p>
-                </div>
-                <div class="glass-card reveal delay-2">
-                    <h3>Linguagem que Confronta</h3>
-                    <p>Frases curtas, ritmo intencional. Impacto que permanece depois que você fecha a tela.</p>
-                </div>
-                <div class="glass-card reveal delay-3">
-                    <h3>Aplicação para Hoje</h3>
-                    <p>Uma pergunta ao final de cada texto que não te deixa sair igual de como entrou.</p>
-                </div>
-                <div class="glass-card reveal delay-1">
-                    <h3>Entregue Todo Dia</h3>
-                    <p>Direto no seu e-mail. Leitura de 3 a 5 minutos. Impacto para 24 horas.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- AMOSTRAS REAIS -->
-    <section class="amostras" id="amostras">
-        <div class="container">
-            <span class="section-label reveal">Mergulhe no conteúdo</span>
-            <h2 class="section-title reveal">Leia antes de assinar</h2>
-            <p class="section-subtitle reveal">Cinco chaves reais — provadas no texto. O que você recebe todo dia tem este nível.</p>
-            
-            <div class="amostra-wrapper">
-                <div class="amostra-card reveal">
-                    <h4>"Quietude Que Combate" (Êx 14.13–14)</h4>
+            <div class="samples-grid">
+                <div class="sample-card reveal">
+                    <h4>"Quietude Que Combate"<br>(Êx 14.13–14)</h4>
                     <p>A palavra militar "ficai quietos" era ordem de batalha, não meditação. Israel foi instruído a assumir posição de combate sem empunhar armas.</p>
                 </div>
-                
-                <div class="amostra-card reveal delay-1">
-                    <h4>"O Anônimo Que Fugiu Nu" (Mc 14.51–52)</h4>
-                    <p>O único humano que foge nu nas Escrituras é Adão. O Getsêmani ecoou o Éden. A vergonha mais antiga voltou onde o sacrifício que a apagaria acontecia.</p>
+                <div class="sample-card reveal delay-1">
+                    <h4>"O Anônimo Que Fugiu Nu"<br>(Mc 14.51)</h4>
+                    <p>O único humano que foge nu nas Escrituras é Adão. O Getsêmani ecoou o Éden. A vergonha antiga voltou onde o sacrifício acontecia.</p>
                 </div>
-                
-                <div class="amostra-card reveal delay-2">
-                    <h4>"O Nome da Colheita na Dor" (Gn 41.52)</h4>
-                    <p>José nomeou o filho Efraim — frutificação dentro do sofrimento. Deus me fez frutificar não apesar da dor, mas dentro dela.</p>
-                </div>
-                
-                <div class="amostra-card reveal delay-1">
-                    <h4>"O Carimbo Mais Poderoso da História" (Jo 19.30)</h4>
-                    <p>Arqueólogos encontraram papiros com carimbo de quitação comercial — as mesmas palavras do grito de Jesus na cruz. Uma declaração jurídica de que todo passivo da humanidade estava encerrado.</p>
-                </div>
-                
-                <div class="amostra-card reveal delay-2">
-                    <h4>"A Água Que Virou Oferta" (2Sm 23.16–17)</h4>
-                    <p>Três homens romperam linhas de guerra por um copo d'água. Davi entendeu: aquilo não era água. Era sangue. A única resposta digna era derramar de volta.</p>
+                <div class="sample-card reveal delay-2">
+                    <h4>"A Água Que Virou Oferta"<br>(2Sm 23.16)</h4>
+                    <p>Três homens romperam linhas de guerra por água. Davi entendeu: aquilo não era água. Era sangue. A resposta digna era derramar de volta.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- DIFERENCIAL -->
-    <section class="diferencial">
-        <div class="container">
-            <span class="section-label reveal">Por que é diferente</span>
-            <h2 class="section-title reveal">Isso não é para te animar.</h2>
-            <ul class="diferencial-list">
-                <li class="reveal delay-1">Não é leitura rápida sem profundidade — cada texto carrega pesquisa teológica real.</li>
-                <li class="reveal delay-2">Não é motivacional vazio — cada chave confronta antes de confortar.</li>
-                <li class="reveal delay-3">Não é genérico — cada devocional nasce de um texto bíblico específico, escavado até as camadas que a leitura comum não vê.</li>
-                <li class="highlight reveal delay-1">Não é produção em série — cada chave carrega a voz de quem passou décadas estudando a Palavra e a vida humana.</li>
-            </ul>
+    <!-- PRICING -->
+    <section class="section" style="border-top: 1px solid var(--border);">
+        <div class="container pricing reveal">
+            <h2>Acesso Ilimitado.</h2>
+            <div class="price-huge">R$50</div>
+            <div class="price-sub">Por mês. Apenas R$ 1,66 por dia.</div>
             
-            <div class="central-phrase reveal">
-                "Isso não é para te animar.<br><span class="highlight-text">É para te transformar.</span>"
-            </div>
-        </div>
-    </section>
-
-    <!-- AUTOR -->
-    <section class="autor-section">
-        <div class="container">
-            <div class="autor">
-                <div class="autor-img reveal"></div>
-                <div class="autor-text reveal delay-1">
-                    <span class="section-label reveal" style="text-align: left; margin-bottom: 0.5rem;">Quem escreve</span>
-            <h2>L. A. <span>Ferreira</span></h2>
-                    <p>Pastor há mais de 20 anos, teólogo e terapeuta. Uma combinação rara — porque cada devocional carrega não só exegese, mas compreensão real de como a Palavra toca o comportamento humano.</p>
-                    <p>Fundador da Igreja Batista da Restauração e da escola bíblica EFATEL. Autor e conferencista.</p>
-                    <p>Cada chave diária nasce da mesma mesa onde sermões, aulas e sessões terapêuticas se encontram. Não é teoria. É Palavra testada na dor real das pessoas.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PRICING BOX -->
-    <section class="pricing-section">
-        <div class="container">
+            <a href="SEU_LINK_SUBSTACK_AQUI" class="btn-huge">
+                <span>Quero Receber as Chaves</span>
+            </a>
             
-            <div class="pricing-box reveal">
-                <div class="ribbon">Oferta Limitada</div>
-                
-                <!-- Countdown -->
-                <div class="countdown-container" id="countdown-container">
-                    <p class="countdown-msg">Acesso gratuito encerra em: <br><span>10 de Maio de 2025</span></p>
-                    <div class="countdown">
-                        <div class="cd-item">
-                            <span class="cd-value" id="days">00</span>
-                            <span class="cd-label">Dias</span>
-                        </div>
-                        <div class="cd-item">
-                            <span class="cd-value" id="hours">00</span>
-                            <span class="cd-label">Horas</span>
-                        </div>
-                        <div class="cd-item">
-                            <span class="cd-value" id="minutes">00</span>
-                            <span class="cd-label">Min</span>
-                        </div>
-                        <div class="cd-item">
-                            <span class="cd-value" id="seconds">00</span>
-                            <span class="cd-label">Seg</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Pricing -->
-                <span class="section-label reveal">Acesso</span>
-                <h3 class="price-title">Uma chave por dia. Por menos que um café.</h3>
-                <div class="price">R$50<span>/mês</span></div>
-                <p style="color: var(--gold-bright); font-size: 1.2rem; font-weight: bold; margin-top: -1.5rem; margin-bottom: 2.5rem; font-style: italic;">(Apenas R$ 1,66 por dia)</p>
-                
-                <ul class="pricing-features">
-                    <li>1 Devocional inédito e profundo por dia</li>
-                    <li>Entrega direta no seu e-mail via Substack</li>
-                    <li>Acesso integral a todo o arquivo passado</li>
-                    <li>Pergunta de reflexão ao final de cada texto — que muda a forma de agir</li>
-                </ul>
-                
-                <!-- CTA Final -->
-                <div class="cta-final">
-                    <a href="SEU_LINK_SUBSTACK_AQUI" class="btn btn-pulse" style="width: 100%; font-size: 1.4rem;">Quero Assinar Agora</a>
-                    <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 8px; color: #25d366;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>
-                        <p style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-style: normal;"><strong>Sem contratos.</strong> <span style="color: var(--text-muted);">Sem permanência. Cancele quando quiser com um clique.</span></p>
-                    </div>
-                </div>
-            </div>
-            
+            <p style="margin-top: 2rem; font-size: 1rem;">Sem contratos. Cancele quando quiser com um clique.</p>
         </div>
     </section>
 
     <!-- FAQ -->
-    <section class="faq-section">
-        <div class="container">
-            <span class="section-label reveal">Dúvidas</span>
-            <h2 class="section-title reveal">Perguntas <span>Frequentes</span></h2>
-            <div class="faq-item reveal delay-1">
-                <h4>Como e quando vou receber os devocionais?</h4>
-                <p>Todo dia pela manhã, o devocional chega direto no e-mail que você cadastrar. É só abrir e ler — 3 a 5 minutos que valem o dia.</p>
-            </div>
-            <div class="faq-item reveal delay-2">
-                <h4>Tem algum período de fidelidade?</h4>
-                <p>Não. A assinatura é mensal e você tem o controle total. Pode cancelar a qualquer momento com apenas um clique, sem burocracia.</p>
-            </div>
-            <div class="faq-item reveal delay-3">
-                <h4>Eu terei acesso aos textos anteriores?</h4>
-                <p>Sim! Ao assinar, você desbloqueia imediatamente todo o arquivo de devocionais profundos já publicados anteriormente na plataforma.</p>
-            </div>
-            <div class="faq-item reveal delay-1">
-                <h4>O conteúdo é para qualquer cristão ou só para pastores e líderes?</h4>
-                <p>Para qualquer pessoa que leva a Palavra a sério. Você não precisa ter formação teológica — precisa ter fome de algo mais profundo do que o devocional comum oferece.</p>
+    <section class="section">
+        <div class="container" style="max-width: 900px;">
+            <h2 style="margin-bottom: 4rem;" class="reveal">FAQ</h2>
+            
+            <div class="faq-list reveal delay-1">
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question">
+                        <span>Como vou receber?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Todo dia pela manhã, o devocional chega direto no e-mail que você cadastrar. É só abrir e ler. Simples e sem necessidade de baixar novos aplicativos.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question">
+                        <span>Tem período de fidelidade?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Não. A assinatura é mensal e você tem o controle total. Pode cancelar a qualquer momento direto na plataforma, sem precisar falar com nenhum atendente.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question">
+                        <span>Terei acesso aos textos passados?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sim! Ao assinar, você desbloqueia imediatamente todo o arquivo histórico de devocionais profundos já publicados, podendo ler o que perdeu.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Sabedoria Revelada — L. A. Ferreira. Todos os direitos reservados.</p>
+            <p>&copy; 2025 Sabedoria Revelada. Todos os direitos reservados.</p>
         </div>
     </footer>
 
-    <!-- STICKY CTA -->
-    <div class="sticky-cta">
-        <div class="container sticky-content">
-            <p class="sticky-text">Uma palavra por dia. <span>Para o resto da sua vida.</span></p>
-            <a href="SEU_LINK_SUBSTACK_AQUI" class="btn">Garantir Acesso Gratuito</a>
-        </div>
-    </div>
-
-    <!-- BACK TO TOP BUTTON -->
-    <a href="#inicio" class="back-to-top" aria-label="Voltar ao topo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
-        </svg>
-    </a>
-
-    <!-- WHATSAPP FLOAT BUTTON -->
-    <div class="whatsapp-wrapper">
-        <div class="whatsapp-text">Fale agora conosco</div>
-        <a href="https://wa.me/5567999128212" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Fale conosco no WhatsApp">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 35px; height: 35px; fill: #FFF;"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-        </a>
-    </div>
-
-    <!-- JAVASCRIPT -->
     <script>
-        // Intersection Observer for Scroll Animations
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
+        // Initialize Lenis (Smooth Scroll)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        })
+
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
         }
-        window.addEventListener("scroll", reveal);
-        reveal(); // Trigger on load
+        requestAnimationFrame(raf)
 
-        // Sticky CTA and Back to Top Visibility
-        const heroSection = document.querySelector('.hero');
-        const stickyCta = document.querySelector('.sticky-cta');
-        const backToTop = document.querySelector('.back-to-top');
-        window.addEventListener('scroll', () => {
-            if(window.scrollY > heroSection.offsetHeight) {
-                stickyCta.classList.add('visible');
-                if(backToTop) backToTop.classList.add('visible');
-            } else {
-                stickyCta.classList.remove('visible');
-                if(backToTop) backToTop.classList.remove('visible');
-            }
+        // Intersection Observer for Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(element => {
+            observer.observe(element);
         });
 
-        // Navbar scroll effect
+        // Navbar blur on scroll
         window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
+            const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
-                nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.8)';
-                nav.style.padding = '0.5rem 0';
+                nav.classList.add('scrolled');
             } else {
-                nav.style.boxShadow = 'none';
-                nav.style.padding = '1rem 0';
+                nav.classList.remove('scrolled');
             }
         });
-
-        // Countdown Timer
-        const targetDate = new Date('2025-05-10T23:59:59').getTime();
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                clearInterval(timer);
-                document.getElementById('countdown-container').innerHTML = "<div class='countdown-msg' style='font-size: 1.5rem; color: var(--gold-bright);'>Acesso gratuito encerrado. Assine agora.</div>";
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = days.toString().padStart(2, '0');
-            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-        }, 1000);
     </script>
 </body>
 </html>
