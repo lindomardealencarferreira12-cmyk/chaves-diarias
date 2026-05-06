@@ -122,6 +122,7 @@ html_template = """<!DOCTYPE html>
         .portal-overlay {{
             position: fixed; inset: 0; z-index: 99998; pointer-events: none;
             display: flex; perspective: 1500px; overflow: hidden;
+            opacity: 0; transition: opacity 0.3s;
         }}
         .portal-door {{
             width: 50vw; height: 100vh; background: #080808;
@@ -143,9 +144,11 @@ html_template = """<!DOCTYPE html>
         .portal-door.left::after {{ right: 0; background: linear-gradient(to left, rgba(229, 192, 123, 0.1), transparent); }}
         .portal-door.right::after {{ left: 0; }}
 
+        /* Visible State */
+        body.portal-visible {{ overflow: hidden !important; }}
+        body.portal-visible .portal-overlay {{ opacity: 1; pointer-events: auto; }}
+
         /* Open State */
-        body.portal-active {{ overflow: hidden !important; }}
-        body.portal-active .portal-overlay {{ pointer-events: auto; }}
         body.portal-active .portal-door.left {{ transform: rotateY(90deg); }}
         body.portal-active .portal-door.right {{ transform: rotateY(-90deg); }}
         body.portal-active .portal-door::after {{ opacity: 1; }}
@@ -453,10 +456,13 @@ html_template = """<!DOCTYPE html>
             // Start turn animation
             wrapper.classList.add('is-turning');
             tooltip.style.opacity = '0';
-            h1.style.opacity = '0';
-            p.style.opacity = '0';
             
-            // After key turns (800ms), open the door
+            // Fade in the closed doors
+            setTimeout(() => {{
+                document.body.classList.add('portal-visible');
+            }}, 400);
+
+            // Open the doors to reveal scroll
             setTimeout(() => {{
                 document.body.classList.add('portal-active');
             }}, 800);
@@ -464,6 +470,7 @@ html_template = """<!DOCTYPE html>
 
         function closePortal() {{
             document.body.classList.remove('portal-active');
+            document.body.classList.remove('portal-visible');
             const wrapper = document.querySelector('.hero-key-wrapper');
             const tooltip = document.getElementById('keyTooltip');
             const h1 = document.getElementById('heroH1');
