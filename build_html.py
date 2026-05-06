@@ -67,11 +67,35 @@ html_template = """<!DOCTYPE html>
 
         .hero {{ min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-top: 15vh; position: relative; }}
 
-        .hero-key-wrapper {{ display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; margin-bottom: 3rem; position: relative; z-index: 10; width: 100%; }}
-        .hero-img {{ width: 500px; max-width: 90vw; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); animation: float-key 6s ease-in-out infinite; border-radius: 20px; mix-blend-mode: screen; transition: filter 0.5s var(--ease), transform 0.5s var(--ease); margin: 0 auto; }}
+        .hero-key-wrapper {{ display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; margin-bottom: 3rem; position: relative; z-index: 10; width: 100%; cursor: pointer; }}
+        
+        /* Animated Smoke behind the key */
+        .smoke-particles {{ position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; display: flex; align-items: center; justify-content: center; }}
+        .smoke-particle {{
+            position: absolute; width: 80px; height: 80px; background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%; filter: blur(25px); animation: smokeRise 5s infinite linear;
+        }}
+        .smoke-particle:nth-child(1) {{ left: 30%; animation-delay: 0s; animation-duration: 6s; }}
+        .smoke-particle:nth-child(2) {{ left: 50%; animation-delay: 2s; animation-duration: 5s; }}
+        .smoke-particle:nth-child(3) {{ left: 70%; animation-delay: 1s; animation-duration: 7s; }}
+        @keyframes smokeRise {{
+            0% {{ transform: translateY(30px) scale(0.8); opacity: 0; }}
+            50% {{ opacity: 0.8; }}
+            100% {{ transform: translateY(-80px) scale(2.5); opacity: 0; }}
+        }}
+
+        .hero-img {{ width: 500px; max-width: 90vw; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); animation: float-key 6s ease-in-out infinite; border-radius: 20px; mix-blend-mode: screen; transition: filter 0.5s var(--ease), transform 0.5s var(--ease); margin: 0 auto; position: relative; z-index: 2; }}
         @keyframes float-key {{ 0%, 100% {{ transform: translateY(0); }} 50% {{ transform: translateY(-15px); }} }}
         .hero-key-wrapper:hover .hero-img {{ filter: drop-shadow(0 20px 40px rgba(229, 192, 123, 0.6)); transform: scale(1.05); }}
         
+        /* Key Turning Animation */
+        .hero-key-wrapper.is-turning .hero-img {{
+            animation: none; /* stop float */
+            transform: rotate(180deg) scale(1.2);
+            filter: drop-shadow(0 0 80px rgba(229, 192, 123, 1));
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), filter 0.8s ease;
+        }}
+
         .key-tooltip {{
             background: var(--accent);
             color: #000;
@@ -85,12 +109,84 @@ html_template = """<!DOCTYPE html>
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
         }}
         .hero-key-wrapper:hover .key-tooltip {{ background: #fff; transform: translateY(-5px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3); }}
 
-        .hero h1 {{ font-size: clamp(3rem, 8vw, 6rem); letter-spacing: -0.05em; line-height: 0.95; z-index: 2; position: relative; }}
+        .hero h1 {{ font-size: clamp(3rem, 8vw, 6rem); letter-spacing: -0.05em; line-height: 0.95; z-index: 2; position: relative; transition: opacity 0.5s ease; }}
         .hero h1 span {{ display: block; font-style: italic; color: var(--accent); opacity: 0.9; }}
-        .hero p {{ max-width: 600px; margin: 2rem auto; font-size: 1.25rem; z-index: 2; position: relative; }}
+        .hero p {{ max-width: 600px; margin: 2rem auto; font-size: 1.25rem; z-index: 2; position: relative; transition: opacity 0.5s ease; }}
+
+        /* 3D Portal Doors Overlay */
+        .portal-overlay {{
+            position: fixed; inset: 0; z-index: 99998; pointer-events: none;
+            display: flex; perspective: 1500px; overflow: hidden;
+        }}
+        .portal-door {{
+            width: 50vw; height: 100vh; background: #080808;
+            border-right: 1px solid rgba(229, 192, 123, 0.3); box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            position: relative;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-blend-mode: overlay;
+        }}
+        .portal-door.right {{ border-right: none; border-left: 1px solid rgba(229, 192, 123, 0.3); transform-origin: right center; }}
+        .portal-door.left {{ transform-origin: left center; }}
+        
+        /* Inner glow on doors */
+        .portal-door::after {{
+            content: ''; position: absolute; top: 0; bottom: 0; width: 100px;
+            background: linear-gradient(to right, rgba(229, 192, 123, 0.1), transparent);
+            opacity: 0; transition: opacity 1s; pointer-events: none;
+        }}
+        .portal-door.left::after {{ right: 0; background: linear-gradient(to left, rgba(229, 192, 123, 0.1), transparent); }}
+        .portal-door.right::after {{ left: 0; }}
+
+        /* Open State */
+        body.portal-active {{ overflow: hidden !important; }}
+        body.portal-active .portal-overlay {{ pointer-events: auto; }}
+        body.portal-active .portal-door.left {{ transform: rotateY(90deg); }}
+        body.portal-active .portal-door.right {{ transform: rotateY(-90deg); }}
+        body.portal-active .portal-door::after {{ opacity: 1; }}
+
+        /* Scroll Modal behind doors */
+        .scroll-modal-container {{
+            position: fixed; inset: 0; z-index: 99997; pointer-events: none;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+            opacity: 0; transition: opacity 0.5s ease 0.5s; /* fades in after doors start opening */
+        }}
+        body.portal-active .scroll-modal-container {{ pointer-events: auto; opacity: 1; z-index: 99999; }}
+
+        .scroll-modal {{
+            width: 90vw; max-width: 600px;
+            background-image: url('mystical_ancient_scroll_1778070821283.png');
+            background-size: cover; background-position: center;
+            border-radius: 20px; box-shadow: 0 30px 100px rgba(0,0,0,0.9), 0 0 80px rgba(229,192,123,0.3);
+            padding: 4rem 3rem; text-align: center;
+            position: relative;
+            transform: scale(0.8) translateY(50px); transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1) 0.8s;
+        }}
+        body.portal-active .scroll-modal {{ transform: scale(1) translateY(0); }}
+        
+        .scroll-overlay-dark {{
+            position: absolute; inset: 0; background: rgba(10, 10, 10, 0.7);
+            border-radius: 20px; pointer-events: none;
+        }}
+
+        .scroll-close {{
+            position: absolute; top: 20px; right: 20px; color: #fff; cursor: pointer;
+            font-size: 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;
+            transition: all 0.3s;
+        }}
+        .scroll-close:hover {{ background: rgba(255,255,255,0.2); transform: scale(1.1); }}
+
+        .scroll-content {{ position: relative; z-index: 2; }}
+        .scroll-content h3 {{ font-family: var(--font-display); font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }}
+        .scroll-content p {{ color: #f2f2f2; font-size: 1.1rem; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.8); margin-bottom: 2rem; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 12px; border: 1px solid rgba(229, 192, 123, 0.1); backdrop-filter: blur(10px); }}
+
 
         .badge {{ background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3rem; display: inline-flex; align-items: center; gap: 10px; z-index: 2; position: relative; }}
         .badge-dot {{ width: 8px; height: 8px; background: #25d366; border-radius: 50%; box-shadow: 0 0 10px #25d366; animation: pulse-dot 2s infinite; }}
@@ -153,6 +249,27 @@ html_template = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <!-- Portal Overlay -->
+    <div class="portal-overlay">
+        <div class="portal-door left"></div>
+        <div class="portal-door right"></div>
+    </div>
+
+    <!-- Scroll Modal -->
+    <div class="scroll-modal-container">
+        <div class="scroll-modal">
+            <div class="scroll-overlay-dark"></div>
+            <div class="scroll-close" onclick="closePortal()">✕</div>
+            <div class="scroll-content">
+                <h3>{scroll_title}</h3>
+                <p>{scroll_p}</p>
+                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn-huge" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1.1rem; width: 100%;">
+                    <span>{scroll_btn}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <nav id="navbar">
         <div class="container nav-content">
             <div class="nav-left"></div>
@@ -173,13 +290,18 @@ html_template = """<!DOCTYPE html>
                 {badge_text}
             </div>
             
-            <a href="SEU_LINK_SUBSTACK_AQUI" class="hero-key-wrapper reveal delay-1">
-                <img src="horizontal_smoke_key_1777510824466.png" alt="Key" class="hero-img">
-                <div class="key-tooltip">{tooltip_text}</div>
+            <a href="#" class="hero-key-wrapper reveal delay-1" onclick="turnKey(event)">
+                <div class="smoke-particles">
+                    <div class="smoke-particle"></div>
+                    <div class="smoke-particle"></div>
+                    <div class="smoke-particle"></div>
+                </div>
+                <img src="horizontal_smoke_key_1777510824466.png" alt="Key" class="hero-img" id="heroKey">
+                <div class="key-tooltip" id="keyTooltip">{tooltip_text}</div>
             </a>
             
-            <h1 class="reveal delay-2">{h1_main} <span>{h1_span}</span></h1>
-            <p class="reveal delay-3">{hero_p}</p>
+            <h1 class="reveal delay-2" id="heroH1">{h1_main} <span>{h1_span}</span></h1>
+            <p class="reveal delay-3" id="heroP">{hero_p}</p>
         </div>
     </section>
 
@@ -316,9 +438,45 @@ html_template = """<!DOCTYPE html>
         const lenis = new Lenis({{ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: true, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false }})
         function raf(time) {{ lenis.raf(time); requestAnimationFrame(raf); }}
         requestAnimationFrame(raf);
+        
         const observer = new IntersectionObserver((entries) => {{ entries.forEach(entry => {{ if (entry.isIntersecting) {{ entry.target.classList.add('active'); }} }}); }}, {{ threshold: 0.1 }});
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         window.addEventListener('scroll', () => {{ document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); }});
+
+        function turnKey(e) {{
+            e.preventDefault();
+            const wrapper = document.querySelector('.hero-key-wrapper');
+            const tooltip = document.getElementById('keyTooltip');
+            const h1 = document.getElementById('heroH1');
+            const p = document.getElementById('heroP');
+            
+            // Start turn animation
+            wrapper.classList.add('is-turning');
+            tooltip.style.opacity = '0';
+            h1.style.opacity = '0';
+            p.style.opacity = '0';
+            
+            // After key turns (800ms), open the door
+            setTimeout(() => {{
+                document.body.classList.add('portal-active');
+            }}, 800);
+        }}
+
+        function closePortal() {{
+            document.body.classList.remove('portal-active');
+            const wrapper = document.querySelector('.hero-key-wrapper');
+            const tooltip = document.getElementById('keyTooltip');
+            const h1 = document.getElementById('heroH1');
+            const p = document.getElementById('heroP');
+            
+            // Reset key after door closes
+            setTimeout(() => {{
+                wrapper.classList.remove('is-turning');
+                tooltip.style.opacity = '1';
+                h1.style.opacity = '1';
+                p.style.opacity = '1';
+            }}, 500);
+        }}
     </script>
 </body>
 </html>
@@ -344,7 +502,10 @@ configs = {
         "faq_title": "FAQ",
         "f1_q": "Como vou receber?", "f1_a": "Todo dia pela manhã no e-mail. É só abrir e ler.",
         "f2_q": "Tem período de fidelidade?", "f2_a": "Não. Cancele a qualquer momento direto na plataforma.",
-        "f3_q": "Terei acesso aos textos passados?", "f3_a": "Sim! Ao assinar, você desbloqueia o arquivo histórico completo."
+        "f3_q": "Terei acesso aos textos passados?", "f3_a": "Sim! Ao assinar, você desbloqueia o arquivo histórico completo.",
+        "scroll_title": "A Quietude Que Combate",
+        "scroll_p": 'A palavra militar "ficai quietos" em Êxodo 14 era uma ordem de batalha, não um convite à meditação. Há uma ação profunda em saber a hora de parar.<br><br>Esta é apenas <b>uma</b> das chaves. Destrave seu acesso completo agora.',
+        "scroll_btn": "Quero Receber as Chaves"
     },
     "index-en.html": {
         "lang": "en", "title": "Revealed Wisdom - A Key A Day", "brand_name": "Revealed Wisdom", "brand_sub": "A Key A Day",
@@ -365,7 +526,10 @@ configs = {
         "faq_title": "FAQ",
         "f1_q": "How will I receive it?", "f1_a": "Every morning in your email. Just open and read.",
         "f2_q": "Is there a loyalty period?", "f2_a": "No. Cancel anytime directly on the platform.",
-        "f3_q": "Will I have access to past texts?", "f3_a": "Yes! By subscribing, you unlock the entire historical archive."
+        "f3_q": "Will I have access to past texts?", "f3_a": "Yes! By subscribing, you unlock the entire historical archive.",
+        "scroll_title": "The Quietness That Fights",
+        "scroll_p": 'The military word "be still" in Exodus 14 was an order of battle, not an invitation to meditation. There is profound action in knowing when to stop.<br><br>This is just <b>one</b> of the keys. Unlock your full access now.',
+        "scroll_btn": "Claim My Keys Now"
     },
     "index-es.html": {
         "lang": "es", "title": "Sabiduría Revelada - Una Llave Por Día", "brand_name": "Sabiduría Revelada", "brand_sub": "Una Llave Por Día",
@@ -386,7 +550,10 @@ configs = {
         "faq_title": "Preguntas Frecuentes",
         "f1_q": "¿Cómo lo recibiré?", "f1_a": "Cada mañana en su correo. Solo ábralo y lea.",
         "f2_q": "¿Hay período de permanencia?", "f2_a": "No. Puede cancelar en cualquier momento directamente en la plataforma.",
-        "f3_q": "¿Tendré acceso a textos anteriores?", "f3_a": "¡Sí! Al suscribirse, desbloquea todo el archivo histórico."
+        "f3_q": "¿Tendré acceso a textos anteriores?", "f3_a": "¡Sí! Al suscribirse, desbloquea todo el archivo histórico.",
+        "scroll_title": "La Quietud que Combate",
+        "scroll_p": 'La palabra militar "estad quietos" en Éxodo 14 era una orden de batalla, no una invitación a la meditación. Hay una acción profunda en saber cuándo detenerse.<br><br>Esta es solo <b>una</b> de las llaves. Desbloquea tu acceso completo ahora.',
+        "scroll_btn": "Quiero Recibir las Llaves"
     }
 }
 
