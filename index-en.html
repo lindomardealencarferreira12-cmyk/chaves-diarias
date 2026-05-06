@@ -459,6 +459,30 @@
 
         const doorSound = new Audio('https://actions.google.com/sounds/v1/doors/wood_door_open.ogg');
 
+        
+        let autoScrollInterval;
+        let isHovered = false;
+
+        function startAutoScroll() {
+            const modal = document.querySelector('.scroll-modal');
+            modal.scrollTop = 0; // reset scroll
+            clearInterval(autoScrollInterval);
+            
+            // Start scrolling after 4 seconds to give user time to start reading
+            setTimeout(() => {
+                autoScrollInterval = setInterval(() => {
+                    if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {
+                        modal.scrollTop += 1;
+                    }
+                }, 40); // Controls speed (higher is slower)
+            }, 4000);
+        }
+
+        document.querySelector('.scroll-modal').addEventListener('mouseenter', () => isHovered = true);
+        document.querySelector('.scroll-modal').addEventListener('mouseleave', () => isHovered = false);
+        document.querySelector('.scroll-modal').addEventListener('touchstart', () => isHovered = true);
+        document.querySelector('.scroll-modal').addEventListener('touchend', () => { setTimeout(() => isHovered=false, 2000) });
+
         function turnKey(e) {
             e.preventDefault();
             const wrapper = document.querySelector('.hero-key-wrapper');
@@ -478,12 +502,14 @@
             // Open the doors to reveal scroll
             setTimeout(() => {
                 document.body.classList.add('portal-active');
+                startAutoScroll();
                 doorSound.play().catch(err => console.log('Audio auto-play blocked', err));
             }, 800);
         }
 
         function closePortal() {
             document.body.classList.remove('portal-active');
+            clearInterval(autoScrollInterval);
             document.body.classList.remove('portal-visible');
             const wrapper = document.querySelector('.hero-key-wrapper');
             const tooltip = document.getElementById('keyTooltip');

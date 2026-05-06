@@ -465,25 +465,25 @@ html_template = """<!DOCTYPE html>
         let autoScrollInterval;
         let isHovered = false;
 
-        function startAutoScroll() {
+        function startAutoScroll() {{
             const modal = document.querySelector('.scroll-modal');
             modal.scrollTop = 0; // reset scroll
             clearInterval(autoScrollInterval);
             
             // Start scrolling after 4 seconds to give user time to start reading
-            setTimeout(() => {
-                autoScrollInterval = setInterval(() => {
-                    if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {
+            setTimeout(() => {{
+                autoScrollInterval = setInterval(() => {{
+                    if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {{
                         modal.scrollTop += 1;
-                    }
-                }, 40); // Controls speed (higher is slower)
-            }, 4000);
-        }
+                    }}
+                }}, 40); // Controls speed (higher is slower)
+            }}, 4000);
+        }}
 
         document.querySelector('.scroll-modal').addEventListener('mouseenter', () => isHovered = true);
         document.querySelector('.scroll-modal').addEventListener('mouseleave', () => isHovered = false);
         document.querySelector('.scroll-modal').addEventListener('touchstart', () => isHovered = true);
-        document.querySelector('.scroll-modal').addEventListener('touchend', () => { setTimeout(() => isHovered=false, 2000) });
+        document.querySelector('.scroll-modal').addEventListener('touchend', () => {{ setTimeout(() => isHovered=false, 2000) }});
 
         function turnKey(e) {{
             e.preventDefault();
