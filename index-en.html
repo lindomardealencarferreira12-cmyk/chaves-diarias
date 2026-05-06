@@ -162,7 +162,9 @@
         body.portal-active .scroll-modal-container { pointer-events: auto; opacity: 1; z-index: 99999; }
 
         .scroll-modal {
-            width: 90vw; max-width: 600px;
+            width: 95vw; max-width: 800px;
+            max-height: 90vh; overflow-y: auto;
+            scrollbar-width: thin; scrollbar-color: rgba(139, 69, 19, 0.5) transparent;
             background-image: url('mystical_ancient_scroll_1778070821283.png');
             background-size: cover; background-position: center;
             border-radius: 20px; box-shadow: 0 30px 100px rgba(0,0,0,0.9), 0 0 80px rgba(229,192,123,0.3);
@@ -170,13 +172,16 @@
             position: relative;
             transform: translateY(0);
             clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); /* Rolled up completely */
-            transition: clip-path 1.5s cubic-bezier(0.25, 1, 0.5, 1) 1.2s; /* Unrolls after doors open */
+            transition: clip-path 2.5s cubic-bezier(0.25, 1, 0.5, 1) 0.5s; /* Unrolls after doors open */
         }
+        .scroll-modal::-webkit-scrollbar { width: 8px; }
+        .scroll-modal::-webkit-scrollbar-track { background: transparent; }
+        .scroll-modal::-webkit-scrollbar-thumb { background: rgba(139, 69, 19, 0.5); border-radius: 10px; }
+        
         body.portal-active .scroll-modal { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
         
         .scroll-overlay-dark {
-            position: absolute; inset: 0; background: rgba(10, 10, 10, 0.7);
-            border-radius: 20px; pointer-events: none;
+            display: none;
         }
 
         .scroll-close {
@@ -188,8 +193,13 @@
         .scroll-close:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
 
         .scroll-content { position: relative; z-index: 2; }
-        .scroll-content h3 { font-family: var(--font-display); font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-        .scroll-content p { color: #f2f2f2; font-size: 1.1rem; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.8); margin-bottom: 2rem; background: rgba(0,0,0,0.4); padding: 35px; border-radius: 12px; border: 1px solid rgba(229, 192, 123, 0.1); backdrop-filter: blur(10px); text-align: left; }
+        .scroll-content h3 { display: none; }
+        .scroll-content p { 
+            font-family: 'Times New Roman', Times, serif; 
+            color: #1a1a1a; font-size: 1.25rem; line-height: 1.6; text-shadow: none; 
+            margin-bottom: 2rem; background: transparent; padding: 0 10px; 
+            border: none; backdrop-filter: none; text-align: left; 
+        }
 
 
         .badge { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3rem; display: inline-flex; align-items: center; gap: 10px; z-index: 2; position: relative; }
