@@ -126,14 +126,15 @@ html_template = """<!DOCTYPE html>
         }}
         .portal-door {{
             width: 50vw; height: 100vh; background: #080808;
-            border-right: 1px solid rgba(229, 192, 123, 0.3); box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+            background-image: url('epic_heavy_door_1778106660995.png');
+            background-size: 100vw 100vh;
+            background-repeat: no-repeat;
+            border-right: 1px solid rgba(0,0,0,0.8); box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
             transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
             position: relative;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            background-blend-mode: overlay;
         }}
-        .portal-door.right {{ border-right: none; border-left: 1px solid rgba(229, 192, 123, 0.3); transform-origin: right center; }}
-        .portal-door.left {{ transform-origin: left center; }}
+        .portal-door.left {{ transform-origin: left center; background-position: left top; }}
+        .portal-door.right {{ border-right: none; border-left: 1px solid rgba(0,0,0,0.8); transform-origin: right center; background-position: right top; }}
         
         /* Inner glow on doors */
         .portal-door::after {{
@@ -169,9 +170,11 @@ html_template = """<!DOCTYPE html>
             border-radius: 20px; box-shadow: 0 30px 100px rgba(0,0,0,0.9), 0 0 80px rgba(229,192,123,0.3);
             padding: 4rem 3rem; text-align: center;
             position: relative;
-            transform: scale(0.8) translateY(50px); transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1) 0.8s;
+            transform: translateY(0);
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); /* Rolled up completely */
+            transition: clip-path 1.5s cubic-bezier(0.25, 1, 0.5, 1) 1.2s; /* Unrolls after doors open */
         }}
-        body.portal-active .scroll-modal {{ transform: scale(1) translateY(0); }}
+        body.portal-active .scroll-modal {{ clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }}
         
         .scroll-overlay-dark {{
             position: absolute; inset: 0; background: rgba(10, 10, 10, 0.7);
@@ -446,6 +449,8 @@ html_template = """<!DOCTYPE html>
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         window.addEventListener('scroll', () => {{ document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); }});
 
+        const doorSound = new Audio('https://actions.google.com/sounds/v1/doors/wood_door_open.ogg');
+
         function turnKey(e) {{
             e.preventDefault();
             const wrapper = document.querySelector('.hero-key-wrapper');
@@ -465,6 +470,7 @@ html_template = """<!DOCTYPE html>
             // Open the doors to reveal scroll
             setTimeout(() => {{
                 document.body.classList.add('portal-active');
+                doorSound.play().catch(err => console.log('Audio auto-play blocked', err));
             }}, 800);
         }}
 
