@@ -460,21 +460,32 @@ html_template = """<!DOCTYPE html>
         const doorSound = new Audio('https://actions.google.com/sounds/v1/doors/wood_door_open.ogg');
 
         
-        let autoScrollInterval;
+        let autoScrollRaf;
         let isHovered = false;
+        let scrollAccumulator = 0;
+        const scrollSpeed = 0.6; // Speed per frame
+
+        function autoScrollStep() {{
+            const modal = document.querySelector('.scroll-modal');
+            if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {{
+                scrollAccumulator += scrollSpeed;
+                if (scrollAccumulator >= 1) {{
+                    modal.scrollTop += Math.floor(scrollAccumulator);
+                    scrollAccumulator -= Math.floor(scrollAccumulator);
+                }}
+            }}
+            autoScrollRaf = requestAnimationFrame(autoScrollStep);
+        }}
 
         function startAutoScroll() {{
             const modal = document.querySelector('.scroll-modal');
             modal.scrollTop = 0; // reset scroll
-            clearInterval(autoScrollInterval);
+            cancelAnimationFrame(autoScrollRaf);
+            scrollAccumulator = 0;
             
-            // Start scrolling after 4 seconds to give user time to start reading
+            // Start scrolling after 4 seconds
             setTimeout(() => {{
-                autoScrollInterval = setInterval(() => {{
-                    if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {{
-                        modal.scrollTop += 1;
-                    }}
-                }}, 40); // Controls speed (higher is slower)
+                autoScrollRaf = requestAnimationFrame(autoScrollStep);
             }}, 4000);
         }}
 
@@ -509,7 +520,7 @@ html_template = """<!DOCTYPE html>
 
         function closePortal() {{
             document.body.classList.remove('portal-active');
-            clearInterval(autoScrollInterval);
+            cancelAnimationFrame(autoScrollRaf);
             document.body.classList.remove('portal-visible');
             const wrapper = document.querySelector('.hero-key-wrapper');
             const tooltip = document.getElementById('keyTooltip');
@@ -552,7 +563,7 @@ configs = {
         "f3_q": "Terei acesso aos textos passados?", "f3_a": "Sim! Ao assinar, você desbloqueia o arquivo histórico completo.",
         "scroll_title": "",
         "scroll_p": """A Sua Chave Diária de Sabedoria Hoje é:<br><br><b>Dois Gravetos: A Cruz Da Viúva</b><br><br>"Ela respondeu: 'Tão certo como vive o Senhor, teu Deus, não tenho pão algum; tenho apenas um punhado de farinha numa tigela e um pouco de azeite num jarro. Estou apanhando uns gravetos para preparar o alimento para mim e para meu filho; depois disso, vamos morrer.'" (1 Reis 17:12)<br><br>A viúva de Sarepta não havia marcado nenhum encontro. Foi buscar madeira para a última refeição — dois gravetos, um filho com fome e a certeza de que aquilo seria o fim. Sem saber, estava preparando Os Dois Gravetos da Última Refeição.<br><br>O detalhe está numa ação de seis palavras: estava apanhando dois gravetos. Na forma como a lenha era disposta para cozinhar no Oriente Médio antigo, dois gravetos cruzados formavam o arranjo natural para o fogo — uma cruz antes que a cruz existisse. A viúva preparava sua morte em forma de cruz sem saber. Gálatas 3:13 afirma que Cristo se tornou maldição pendurado no madeiro. A provisão chegou a ela no exato momento em que suas mãos tocavam o formato da redenção. O que ela enxergava como postura de desespero era, na linguagem de Deus, postura de adoração.<br><br>Quantas vezes você chegou ao seu último punhado? A última reserva, a última paciência, a última tentativa antes de dizer "vamos morrer." Nesse momento exato — não depois — é quando a presença incomoda aparece e muda a pergunta de "quanto me resta?" para "o que Deus está preparando?"<br><br>Olhe para o que está chamando de fim e pergunte o que Deus está montando ali. Não espere a crise acabar para reconhecer o milagre dentro dela. Nas próximas 24 horas, a chave de sabedoria que você está recebendo hoje é que Deus aparece quando você está segurando Os Dois Gravetos da Última Refeição.<br><br>Quais são seus "dois gravetos" hoje — o que você chama de fim e que Deus pode estar chamando de início?""",
-        "scroll_btn": "Quero Receber as Chaves"
+        "scroll_btn": "Quero Receber Minhas Chaves"
     },
     "index-en.html": {
         "lang": "en", "title": "Revealed Wisdom - A Key A Day", "brand_name": "Revealed Wisdom", "brand_sub": "A Key A Day",

@@ -458,21 +458,32 @@
         const doorSound = new Audio('https://actions.google.com/sounds/v1/doors/wood_door_open.ogg');
 
         
-        let autoScrollInterval;
+        let autoScrollRaf;
         let isHovered = false;
+        let scrollAccumulator = 0;
+        const scrollSpeed = 0.6; // Speed per frame
+
+        function autoScrollStep() {
+            const modal = document.querySelector('.scroll-modal');
+            if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {
+                scrollAccumulator += scrollSpeed;
+                if (scrollAccumulator >= 1) {
+                    modal.scrollTop += Math.floor(scrollAccumulator);
+                    scrollAccumulator -= Math.floor(scrollAccumulator);
+                }
+            }
+            autoScrollRaf = requestAnimationFrame(autoScrollStep);
+        }
 
         function startAutoScroll() {
             const modal = document.querySelector('.scroll-modal');
             modal.scrollTop = 0; // reset scroll
-            clearInterval(autoScrollInterval);
+            cancelAnimationFrame(autoScrollRaf);
+            scrollAccumulator = 0;
             
-            // Start scrolling after 4 seconds to give user time to start reading
+            // Start scrolling after 4 seconds
             setTimeout(() => {
-                autoScrollInterval = setInterval(() => {
-                    if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {
-                        modal.scrollTop += 1;
-                    }
-                }, 40); // Controls speed (higher is slower)
+                autoScrollRaf = requestAnimationFrame(autoScrollStep);
             }, 4000);
         }
 
@@ -507,7 +518,7 @@
 
         function closePortal() {
             document.body.classList.remove('portal-active');
-            clearInterval(autoScrollInterval);
+            cancelAnimationFrame(autoScrollRaf);
             document.body.classList.remove('portal-visible');
             const wrapper = document.querySelector('.hero-key-wrapper');
             const tooltip = document.getElementById('keyTooltip');
