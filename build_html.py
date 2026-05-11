@@ -309,7 +309,7 @@ html_template = """<!DOCTYPE html>
                     <div class="smoke-particle"></div>
                     <div class="smoke-particle"></div>
                 </div>
-                <img src="horizontal_smoke_key_1777510824466.png" alt="Key" class="hero-img" id="heroKey">
+                <video src="cinematic_key.mp4" autoplay loop muted playsinline class="hero-img" id="heroKey"></video>
                 <div class="key-tooltip" id="keyTooltip">{tooltip_text}</div>
             </a>
             
