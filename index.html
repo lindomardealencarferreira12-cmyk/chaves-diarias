@@ -1,537 +1,485 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sabedoria Revelada - Uma Chave Por Dia</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
-
-    <style>
-        :root {
-            --bg: #050505;
-            --text: #F2F2F2;
-            --text-muted: #888888;
-            --accent: #E5C07B;
-            --surface: rgba(25, 25, 25, 0.6);
-            --border: rgba(255, 255, 255, 0.08);
-            
-            --font-display: 'Instrument Serif', serif;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
-            
-            --ease: cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font-sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        
-        body::before {
-            content: ''; position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        ::selection { background: var(--text); color: var(--bg); }
-
-        html.lenis { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-        .lenis.lenis-scrolling iframe { pointer-events: none; }
-
-        h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; }
-        p { line-height: 1.6; font-size: 1.125rem; color: var(--text-muted); }
-        
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 5vw; }
-
-        nav { position: fixed; top: 0; left: 0; right: 0; padding: 2rem 0; z-index: 100; mix-blend-mode: difference; transition: padding 0.3s var(--ease); }
-        nav.scrolled { padding: 1rem 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); mix-blend-mode: normal; }
-        .nav-content { display: flex; justify-content: space-between; align-items: center; }
-        .nav-left, .nav-right { flex: 1; display: flex; }
-        .nav-right { justify-content: flex-end; gap: 1rem; align-items: center; }
-        
-        .logo { flex: 0 0 auto; font-family: var(--font-display); font-size: 2.2rem; color: #fff; text-decoration: none; text-align: center; line-height: 1; white-space: nowrap; }
-        .logo span { font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; display: block; margin-top: 0.5rem; color: var(--text-muted); }
-
-        .lang-link { display: flex; align-items: center; gap: 6px; color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 600; opacity: 0.5; transition: opacity 0.3s var(--ease); }
-        .lang-link img { border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); margin-top: 1px; }
-        .lang-link:hover, .lang-link.active { opacity: 1; }
-
-        .btn-nav { background: #fff; color: #000; padding: 0.8rem 1.5rem; border-radius: 100px; text-decoration: none; font-size: 0.85rem; font-weight: 700; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); }
-        .btn-nav:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
-
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-top: 15vh; position: relative; }
-
-        .hero-key-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; margin-bottom: 3rem; position: relative; z-index: 10; width: 100%; cursor: pointer; }
-        
-        /* Animated Smoke behind the key */
-        .smoke-particles { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; display: flex; align-items: center; justify-content: center; }
-        .smoke-particle {
-            position: absolute; width: 80px; height: 80px; background: rgba(255, 255, 255, 0.08);
-            border-radius: 50%; filter: blur(25px); animation: smokeRise 5s infinite linear;
-        }
-        .smoke-particle:nth-child(1) { left: 30%; animation-delay: 0s; animation-duration: 6s; }
-        .smoke-particle:nth-child(2) { left: 50%; animation-delay: 2s; animation-duration: 5s; }
-        .smoke-particle:nth-child(3) { left: 70%; animation-delay: 1s; animation-duration: 7s; }
-        @keyframes smokeRise {
-            0% { transform: translateY(30px) scale(0.8); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-80px) scale(2.5); opacity: 0; }
-        }
-
-        .hero-img { width: 500px; max-width: 90vw; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); animation: float-key 6s ease-in-out infinite; border-radius: 20px; mix-blend-mode: screen; transition: filter 0.5s var(--ease), transform 0.5s var(--ease); margin: 0 auto; position: relative; z-index: 2; }
-        @keyframes float-key { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .hero-key-wrapper:hover .hero-img { filter: drop-shadow(0 20px 40px rgba(229, 192, 123, 0.6)); transform: scale(1.05); }
-        
-        /* Key Turning Animation */
-        .hero-key-wrapper.is-turning .hero-img {
-            animation: none; /* stop float */
-            transform: rotate(180deg) scale(1.2);
-            filter: drop-shadow(0 0 80px rgba(229, 192, 123, 1));
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), filter 0.8s ease;
-        }
-
-        .key-tooltip {
-            background: var(--accent);
-            color: #000;
-            padding: 12px 30px;
-            border-radius: 100px;
-            font-size: 1.1rem;
-            margin-top: 20px;
-            transition: all 0.3s var(--ease);
-            font-family: var(--font-sans);
-            box-shadow: 0 10px 30px rgba(229, 192, 123, 0.4);
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 2;
-        }
-        .hero-key-wrapper:hover .key-tooltip { background: #fff; transform: translateY(-5px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3); }
-
-        .hero h1 { font-size: clamp(3rem, 8vw, 6rem); letter-spacing: -0.05em; line-height: 0.95; z-index: 2; position: relative; transition: opacity 0.5s ease; }
-        .hero h1 span { display: block; font-style: italic; color: var(--accent); opacity: 0.9; }
-        .hero p { max-width: 600px; margin: 2rem auto; font-size: 1.25rem; z-index: 2; position: relative; transition: opacity 0.5s ease; }
-
-        /* 3D Portal Doors Overlay */
-        .portal-overlay {
-            position: fixed; inset: 0; z-index: 99998; pointer-events: none;
-            display: flex; perspective: 1500px; overflow: hidden;
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .portal-door {
-            width: 50vw; height: 100vh; background: #080808;
-            background-image: url('epic_cross_door_1778107042325.png');
-            background-size: 100vw 100vh;
-            background-repeat: no-repeat;
-            border-right: 1px solid rgba(0,0,0,0.8); box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
-            transition: transform 3.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-        .portal-door.left { transform-origin: left center; background-position: left top; }
-        .portal-door.right { border-right: none; border-left: 1px solid rgba(0,0,0,0.8); transform-origin: right center; background-position: right top; }
-        
-        /* Inner glow on doors */
-        .portal-door::after {
-            content: ''; position: absolute; top: 0; bottom: 0; width: 100px;
-            background: linear-gradient(to right, rgba(229, 192, 123, 0.1), transparent);
-            opacity: 0; transition: opacity 1s; pointer-events: none;
-        }
-        .portal-door.left::after { right: 0; background: linear-gradient(to left, rgba(229, 192, 123, 0.1), transparent); }
-        .portal-door.right::after { left: 0; }
-
-        /* Visible State */
-        body.portal-visible { overflow: hidden !important; }
-        body.portal-visible .portal-overlay { opacity: 1; pointer-events: auto; }
-
-        /* Open State */
-        body.portal-active .portal-door.left { transform: rotateY(90deg); }
-        body.portal-active .portal-door.right { transform: rotateY(-90deg); }
-        body.portal-active .portal-door::after { opacity: 1; }
-
-        /* Scroll Modal behind doors */
-        .scroll-modal-container {
-            position: fixed; inset: 0; z-index: 99997; pointer-events: none;
-            display: flex; justify-content: center;
-            background-color: #f4ecd8; /* Parchment base */
-            background-image: url('seamless_parchment_texture_1778108463499.png');
-            background-size: cover; background-position: center;
-            opacity: 0; transition: opacity 2s ease 1s; /* Fades in smoothly as doors open */
-        }
-        body.portal-active .scroll-modal-container { pointer-events: auto; opacity: 1; z-index: 99999; }
-
-        .scroll-modal {
-            width: 100vw; max-width: 900px; height: 100vh;
-            overflow-y: auto; overflow-x: hidden;
-            padding: 15vh 5vw 20vh; /* Plenty of space top and bottom */
-            scrollbar-width: thin; scrollbar-color: rgba(139, 69, 19, 0.5) transparent;
-            position: relative;
-        }
-        .scroll-modal::-webkit-scrollbar { width: 8px; }
-        .scroll-modal::-webkit-scrollbar-track { background: transparent; }
-        .scroll-modal::-webkit-scrollbar-thumb { background: rgba(139, 69, 19, 0.5); border-radius: 10px; }
-        
-        .scroll-close {
-            position: fixed; top: 30px; right: 30px; color: #fff; cursor: pointer;
-            font-size: 1.5rem; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.2);
-            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100000;
-            transition: all 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .scroll-close:hover { background: #000; transform: scale(1.1); }
-
-        .scroll-content { position: relative; z-index: 2; }
-        .scroll-content h3 { display: none; }
-        .scroll-content p { 
-            font-family: 'Times New Roman', Times, serif; 
-            color: #0d0804; font-weight: 500; font-size: 1.5rem; line-height: 1.8; text-shadow: none; 
-            margin-bottom: 2rem; background: transparent; padding: 0; 
-            border: none; backdrop-filter: none; text-align: center; 
-        }
-
-        /* Make button match parchment style */
-        .scroll-content .btn-huge {
-            background: #2E1F11; color: #f4ecd8; border: 2px solid #2E1F11; box-shadow: none;
-        }
-        .scroll-content .btn-huge::before { background: #4a331c; }
-        .scroll-content .btn-huge:hover { color: #fff; box-shadow: 0 10px 30px rgba(46, 31, 17, 0.4); }
-
-
-        .badge { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3rem; display: inline-flex; align-items: center; gap: 10px; z-index: 2; position: relative; }
-        .badge-dot { width: 8px; height: 8px; background: #25d366; border-radius: 50%; box-shadow: 0 0 10px #25d366; animation: pulse-dot 2s infinite; }
-        @keyframes pulse-dot { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-
-        .section { padding: 10rem 0; position: relative; }
-        .section-header { margin-bottom: 5rem; }
-        .section-header h2 { font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.02em; }
-
-        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; grid-auto-rows: minmax(350px, auto); }
-        .bento-item { background: var(--surface); border: 1px solid var(--border); border-radius: 32px; padding: 3.5rem; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.6s var(--ease), background 0.6s var(--ease), border-color 0.6s var(--ease); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .bento-item:hover { transform: translateY(-10px); background: rgba(40, 40, 40, 0.8); border-color: rgba(255,255,255,0.2); }
-        .bento-item.large { grid-column: span 8; }
-        .bento-item.small { grid-column: span 4; }
-        .bento-item.medium { grid-column: span 6; }
-        .bento-item h3 { font-size: 1.8rem; margin-bottom: 1rem; }
-        .bento-icon { font-size: 4rem; color: var(--accent); margin-bottom: 2rem; font-family: var(--font-display); font-style: italic; opacity: 0.8; }
-
-        .samples-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; }
-        .sample-card { padding-top: 2rem; border-top: 1px solid var(--border); transition: border-color 0.4s var(--ease); }
-        .sample-card:hover { border-top-color: var(--accent); }
-        .sample-card h4 { font-family: var(--font-display); font-size: 2rem; color: #fff; margin-bottom: 1rem; line-height: 1.2; }
-
-        .pricing { text-align: center; max-width: 800px; margin: 0 auto; }
-        .price-huge { font-family: var(--font-display); font-size: clamp(4rem, 10vw, 8rem); line-height: 0.9; margin: 2rem 0; color: var(--accent); text-shadow: 0 0 80px rgba(229, 192, 123, 0.2); }
-        .price-sub { font-size: 1.5rem; color: #fff; }
-
-        .btn-huge { display: inline-flex; align-items: center; justify-content: center; background: #fff; color: #000; font-size: 1.25rem; font-weight: 700; padding: 1.5rem 4rem; border-radius: 100px; text-decoration: none; margin-top: 4rem; transition: all 0.5s var(--ease); position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
-        .btn-huge::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--accent); transform: scaleY(0); transform-origin: bottom; transition: transform 0.5s var(--ease); z-index: 1; border-radius: 100px; }
-        .btn-huge:hover::before { transform: scaleY(1); }
-        .btn-huge span { position: relative; z-index: 2; }
-        .btn-huge:hover { color: #000; box-shadow: 0 20px 50px rgba(229, 192, 123, 0.3); transform: translateY(-5px); }
-
-        .faq-item { border-bottom: 1px solid var(--border); padding: 2.5rem 0; cursor: pointer; transition: border-color 0.3s var(--ease); }
-        .faq-item:hover { border-color: rgba(255,255,255,0.2); }
-        .faq-question { display: flex; justify-content: space-between; align-items: center; font-size: clamp(1.5rem, 3vw, 2.5rem); font-family: var(--font-display); color: #fff; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.5s var(--ease), margin 0.5s var(--ease); color: var(--text-muted); padding-right: 2rem; font-size: 1.2rem; }
-        .faq-item.active .faq-answer { max-height: 300px; margin-top: 1.5rem; }
-        .faq-icon { font-size: 2.5rem; font-weight: 300; transition: transform 0.5s var(--ease); color: var(--accent); }
-        .faq-item.active .faq-icon { transform: rotate(45deg); }
-
-        footer { padding: 5rem 0; text-align: center; border-top: 1px solid var(--border); font-size: 0.9rem; }
-
-        .reveal { opacity: 0; filter: blur(10px); transform: translateY(60px); transition: opacity 1.2s var(--ease), filter 1.2s var(--ease), transform 1.2s var(--ease); }
-        .reveal.active { opacity: 1; filter: blur(0); transform: translateY(0); }
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
-
-        .whatsapp-wrapper { position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-        .whatsapp-text { background-color: #FFF; color: #000; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; font-weight: 800; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; animation: bounce-msg 2s infinite; font-family: var(--font-sans); }
-        .whatsapp-text::after { content: ''; position: absolute; bottom: -6px; right: 20px; border-width: 6px 6px 0; border-style: solid; border-color: #FFF transparent transparent transparent; }
-        @keyframes bounce-msg { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        .whatsapp-float { width: 60px; height: 60px; background-color: #25d366; color: #FFF; border-radius: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s ease; text-decoration: none; animation: pulse-wa 2s infinite; }
-        .whatsapp-float:hover { background-color: #128C7E; transform: scale(1.1); }
-        @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-
-        @media (max-width: 1024px) { .bento-item.large, .bento-item.small, .bento-item.medium { grid-column: span 12; } .bento-grid { grid-auto-rows: auto; } .bento-item { padding: 2.5rem; } .section { padding: 6rem 0; } }
-        @media (max-width: 768px) { .nav-content { flex-direction: column; gap: 1rem; } .nav-right { justify-content: center; width: 100%; } .btn-nav { display: none; } .hero-img { width: 300px; } .faq-question { font-size: 1.5rem; } nav { padding: 1rem 0; } .whatsapp-wrapper { bottom: 30px; right: 20px; } .whatsapp-float { width: 55px; height: 55px; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaves de Sabedoria — Marketplace Premium de Transformação</title>
+<meta name="description" content="Desbloqueie chaves de sabedoria: livros, bíblias, devocionais e mentoria para crescimento espiritual e posicionamento estratégico.">
+<meta property="og:title" content="Chaves de Sabedoria — Marketplace Premium">
+<meta property="og:description" content="Uma experiência premium para quem busca direção, crescimento e soluções criativas com profundidade espiritual.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#d6a84f">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Portal Overlay -->
-    <div class="portal-overlay">
-        <div class="portal-door left"></div>
-        <div class="portal-door right"></div>
+
+<!-- PRELOADER -->
+<div class="preloader">
+  <div class="preloader-key"></div>
+  <p>Chaves de Sabedoria</p>
+</div>
+
+<!-- CART OVERLAY & SIDEBAR -->
+<div class="cart-overlay"></div>
+<div class="cart-sidebar">
+  <div class="cart-header">
+    <h3>🔑 Carrinho</h3>
+    <button class="cart-close">✕</button>
+  </div>
+  <div class="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <span class="val">R$ 0,00</span>
+    </div>
+    <button class="btn btn-primary" style="width:100%;text-align:center;display:block;" onclick="whatsappCheckout()">
+      Finalizar via WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu">
+  <a href="#chaves">Chaves</a>
+  <a href="#produtos">Loja</a>
+  <a href="#planos">Planos</a>
+  <a href="#testemunhos">Testemunhos</a>
+  <a href="#faq">FAQ</a>
+  <a href="#contato">Contato</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">CHAVES DE SABEDORIA</a>
+
+  <div class="nav-links">
+    <a href="#chaves">Chaves</a>
+    <a href="#produtos">Loja</a>
+    <a href="#planos">Planos</a>
+    <a href="#testemunhos">Testemunhos</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contato">Contato</a>
+  </div>
+
+  <div class="nav-actions">
+    <button class="lang-btn active" data-lang="pt" onclick="setLang('pt')"><img src="https://flagcdn.com/w20/br.png" alt="BR" class="flag-img"> PT</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')"><img src="https://flagcdn.com/w20/us.png" alt="US" class="flag-img"> EN</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')"><img src="https://flagcdn.com/w20/es.png" alt="ES" class="flag-img"> ES</button>
+    <button class="cart-btn" aria-label="Carrinho">
+      🛒 <span class="cart-count" style="display:none;">0</span>
+    </button>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header>
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="hero-chave-sagrada.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+  <div class="watermark-cover"></div>
+  <div class="hero-content">
+    <h1 class="hero-title" data-i18n="hero-title">
+      Desbloqueie<br><span>Chaves</span> Diárias<br>de Sabedoria
+    </h1>
+    <p class="hero-sub" data-i18n="hero-sub">
+      Uma experiência premium para quem busca direção, crescimento e soluções criativas com profundidade espiritual e excelência visual.
+    </p>
+    <div class="buttons">
+      <a class="btn btn-primary" href="#chaves" data-i18n="btn-keys">Ver As Chaves</a>
+      <a class="btn btn-secondary" href="https://wa.me/5567999128212" target="_blank" data-i18n="btn-whatsapp">Falar no WhatsApp</a>
+      <a class="btn btn-substack" href="https://lindomardealencarferreira.substack.com/" target="_blank" data-i18n="btn-substack"><svg class="substack-icon" viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg> Assine Grátis e Receba 01 Chave por Dia</a>
+    </div>
+  </div>
+</header>
+
+<!-- IMPACT NUMBERS -->
+<section class="impact">
+  <div class="impact-grid">
+    <div class="impact-item reveal">
+      <h3 data-count="12500" data-suffix="+">0</h3>
+      <p>Vidas Impactadas</p>
+    </div>
+    <div class="impact-item reveal">
+      <h3 data-count="365" data-suffix=" dias">0</h3>
+      <p>De Conteúdo</p>
+    </div>
+    <div class="impact-item reveal">
+      <h3 data-count="48" data-suffix="+">0</h3>
+      <p>Produtos Digitais</p>
+    </div>
+    <div class="impact-item reveal">
+      <h3 data-count="99" data-suffix="%">0</h3>
+      <p>Satisfação</p>
+    </div>
+  </div>
+</section>
+
+<!-- KEYS -->
+<section id="chaves">
+  <div class="section-header reveal">
+    <div class="section-tag" data-i18n="keys-tag">As Chaves</div>
+    <h2 data-i18n="keys-title">Quatro dimensões de transformação</h2>
+    <p data-i18n="keys-desc">Cada chave representa um desbloqueio estratégico para crescimento, posicionamento e clareza.</p>
+  </div>
+  <div class="keys-grid">
+    <div class="key-card reveal">
+      <span class="key-icon">🔍</span>
+      <h3>Clareza</h3>
+      <p>Organize ideias, mensagens e projetos com direção precisa e comunicação forte.</p>
+    </div>
+    <div class="key-card reveal">
+      <span class="key-icon">🧭</span>
+      <h3>Direção</h3>
+      <p>Transforme confusão em visão estratégica através de estrutura e posicionamento.</p>
+    </div>
+    <div class="key-card reveal">
+      <span class="key-icon">👑</span>
+      <h3>Autoridade</h3>
+      <p>Construa uma presença premium que comunique valor, excelência e profundidade.</p>
+    </div>
+    <div class="key-card reveal">
+      <span class="key-icon">🚀</span>
+      <h3>Expansão</h3>
+      <p>Crie experiências, produtos e serviços preparados para crescimento real.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="produtos" style="background:linear-gradient(180deg,rgba(214,168,79,.04),transparent);">
+  <div class="section-header reveal">
+    <div class="section-tag" data-i18n="products-tag">Loja</div>
+    <h2 data-i18n="products-title">Produtos Selecionados</h2>
+    <p data-i18n="products-desc">Recursos premium para aprofundar sua jornada de sabedoria e transformação.</p>
+  </div>
+  <div class="products-grid">
+
+    <div class="product-card reveal">
+      <div class="product-img">
+        <span class="product-badge">Mais Vendido</span>📖
+      </div>
+      <div class="product-info">
+        <h3>Bíblia de Estudo Transformação</h3>
+        <p class="desc">Edição premium com comentários, mapas e guias de estudo aprofundado.</p>
+        <div class="product-price">
+          <span class="price">R$ 189,90</span>
+          <button class="add-cart" onclick="addToCart('Bíblia de Estudo Transformação', 189.90, '📖')">+ Carrinho</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Scroll Modal -->
-    <div class="scroll-modal-container">
-        <div class="scroll-modal" data-lenis-prevent="true">
-            <div class="scroll-overlay-dark"></div>
-            <div class="scroll-close" onclick="closePortal()">✕</div>
-            <div class="scroll-content">
-                <h3></h3>
-                <p>A Sua Chave Diária de Sabedoria Hoje é:<br><br><b>Dois Gravetos: A Cruz Da Viúva</b><br><br>"Ela respondeu: 'Tão certo como vive o Senhor, teu Deus, não tenho pão algum; tenho apenas um punhado de farinha numa tigela e um pouco de azeite num jarro. Estou apanhando uns gravetos para preparar o alimento para mim e para meu filho; depois disso, vamos morrer.'" (1 Reis 17:12)<br><br>A viúva de Sarepta não havia marcado nenhum encontro. Foi buscar madeira para a última refeição — dois gravetos, um filho com fome e a certeza de que aquilo seria o fim. Sem saber, estava preparando Os Dois Gravetos da Última Refeição.<br><br>O detalhe está numa ação de seis palavras: estava apanhando dois gravetos. Na forma como a lenha era disposta para cozinhar no Oriente Médio antigo, dois gravetos cruzados formavam o arranjo natural para o fogo — uma cruz antes que a cruz existisse. A viúva preparava sua morte em forma de cruz sem saber. Gálatas 3:13 afirma que Cristo se tornou maldição pendurado no madeiro. A provisão chegou a ela no exato momento em que suas mãos tocavam o formato da redenção. O que ela enxergava como postura de desespero era, na linguagem de Deus, postura de adoração.<br><br>Quantas vezes você chegou ao seu último punhado? A última reserva, a última paciência, a última tentativa antes de dizer "vamos morrer." Nesse momento exato — não depois — é quando a presença incomoda aparece e muda a pergunta de "quanto me resta?" para "o que Deus está preparando?"<br><br>Olhe para o que está chamando de fim e pergunte o que Deus está montando ali. Não espere a crise acabar para reconhecer o milagre dentro dela. Nas próximas 24 horas, a chave de sabedoria que você está recebendo hoje é que Deus aparece quando você está segurando Os Dois Gravetos da Última Refeição.<br><br>Quais são seus "dois gravetos" hoje — o que você chama de fim e que Deus pode estar chamando de início?</p>
-                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn-huge" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1.1rem; width: 100%;">
-                    <span>Quero Receber Minhas Chaves</span>
-                </a>
-            </div>
+    <div class="product-card reveal">
+      <div class="product-img">
+        <span class="product-badge">Novo</span>📕
+      </div>
+      <div class="product-info">
+        <h3>Devocional 365 Chaves</h3>
+        <p class="desc">Um ano inteiro de reflexões diárias com sabedoria prática e espiritual.</p>
+        <div class="product-price">
+          <span class="price">R$ 79,90</span>
+          <button class="add-cart" onclick="addToCart('Devocional 365 Chaves', 79.90, '📕')">+ Carrinho</button>
         </div>
+      </div>
     </div>
 
-    <nav id="navbar">
-        <div class="container nav-content">
-            <div class="nav-left"></div>
-            <a href="#" class="logo">Sabedoria Revelada<br><span>Uma Chave Por Dia</span></a>
-            <div class="nav-right">
-                <a href="index.html" class="lang-link active"><img src="https://flagcdn.com/w20/br.png" alt="PT" width="16"> PT</a>
-                <a href="index-en.html" class="lang-link "><img src="https://flagcdn.com/w20/us.png" alt="EN" width="16"> EN</a>
-                <a href="index-es.html" class="lang-link "><img src="https://flagcdn.com/w20/es.png" alt="ES" width="16"> ES</a>
-                <a href="SEU_LINK_SUBSTACK_AQUI" class="btn-nav">Acesso Gratuito</a>
-            </div>
+    <div class="product-card reveal">
+      <div class="product-img">📗</div>
+      <div class="product-info">
+        <h3>Livro: O Poder das Chaves</h3>
+        <p class="desc">Princípios de sabedoria para desbloquear portas no pessoal e profissional.</p>
+        <div class="product-price">
+          <span class="price">R$ 59,90</span>
+          <button class="add-cart" onclick="addToCart('O Poder das Chaves', 59.90, '📗')">+ Carrinho</button>
         </div>
-    </nav>
-
-    <section class="hero" id="inicio">
-        <div class="container">
-            <div class="badge reveal">
-                <div class="badge-dot"></div>
-                Acesso gratuito encerra em 10 de maio
-            </div>
-            
-            <a href="#" class="hero-key-wrapper reveal delay-1" onclick="turnKey(event)">
-                <div class="smoke-particles">
-                    <div class="smoke-particle"></div>
-                    <div class="smoke-particle"></div>
-                    <div class="smoke-particle"></div>
-                </div>
-                <video src="cinematic_key.mp4" autoplay loop muted playsinline class="hero-img" id="heroKey"></video>
-                <div class="key-tooltip" id="keyTooltip">Clique na chave e receba sabedoria diária.</div>
-            </a>
-            
-            <h1 class="reveal delay-2" id="heroH1">Uma chave pode abrir o que <span>anos não conseguiram.</span></h1>
-            <p class="reveal delay-3" id="heroP">Não é um devocional comum. É uma chave escavada da Palavra com método real — entregue todo dia, diretamente no seu e-mail.</p>
-        </div>
-    </section>
-
-    <!-- BENTO BOX PROMISE -->
-    <section class="section">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>O que você vai receber.</h2>
-            </div>
-            
-            <div class="bento-grid">
-                <div class="bento-item large reveal">
-                    <div class="bento-icon">01</div>
-                    <div>
-                        <h3>Profundidade Real</h3>
-                        <p>Camadas culturais, linguísticas e históricas que a leitura comum nunca alcança. Mergulhe no texto original.</p>
-                    </div>
-                </div>
-                <div class="bento-item small reveal delay-1">
-                    <div class="bento-icon">02</div>
-                    <div>
-                        <h3>Linguagem que Confronta</h3>
-                        <p>Frases curtas. Ritmo intencional. Impacto que permanece.</p>
-                    </div>
-                </div>
-                <div class="bento-item medium reveal delay-2">
-                    <div class="bento-icon">03</div>
-                    <div>
-                        <h3>Aplicação Imediata</h3>
-                        <p>Uma pergunta incisiva ao final de cada texto que não te deixa sair igual de como entrou.</p>
-                    </div>
-                </div>
-                <div class="bento-item medium reveal delay-3">
-                    <div class="bento-icon">04</div>
-                    <div>
-                        <h3>Entregue Todo Dia</h3>
-                        <p>Direto no e-mail. Leitura de 3 min. Impacto para 24 horas. Disciplina sem esforço.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SAMPLES -->
-    <section class="section" style="background: #090909; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>Amostras Reais</h2>
-                <p style="font-size: 1.5rem; margin-top: 1rem;">Três chaves reais provadas no texto. Este é o nível do que você recebe.</p>
-            </div>
-            <div class="samples-grid">
-                <div class="sample-card reveal">
-                    <h4>"Quietude Que Combate"<br>(Êx 14.13–14)</h4>
-                    <p>A palavra militar "ficai quietos" era ordem de batalha, não meditação.</p>
-                </div>
-                <div class="sample-card reveal delay-1">
-                    <h4>"O Anônimo Que Fugiu Nu"<br>(Mc 14.51)</h4>
-                    <p>O único humano que foge nu nas Escrituras é Adão. O Getsêmani ecoou o Éden.</p>
-                </div>
-                <div class="sample-card reveal delay-2">
-                    <h4>"A Água Que Virou Oferta"<br>(2Sm 23.16)</h4>
-                    <p>Três homens romperam linhas de guerra por água. Davi entendeu: era sangue.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="section">
-        <div class="container pricing reveal">
-            <h2>Acesso Ilimitado.</h2>
-            <div class="price-huge">R$50</div>
-            <div class="price-sub">Por mês. Apenas R$ 1,66 por dia.</div>
-            
-            <a href="SEU_LINK_SUBSTACK_AQUI" class="btn-huge">
-                <span>Quero Receber as Chaves</span>
-            </a>
-            
-            <p style="margin-top: 2rem; font-size: 1rem;">Sem contratos. Cancele quando quiser com um clique.</p>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section" style="border-top: 1px solid var(--border);">
-        <div class="container" style="max-width: 900px;">
-            <h2 style="margin-bottom: 4rem;" class="reveal">FAQ</h2>
-            
-            <div class="faq-list reveal delay-1">
-                <div class="faq-item" onclick="this.classList.toggle('active')">
-                    <div class="faq-question">
-                        <span>Como vou receber?</span>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Todo dia pela manhã no e-mail. É só abrir e ler.</p>
-                    </div>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('active')">
-                    <div class="faq-question">
-                        <span>Tem período de fidelidade?</span>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Não. Cancele a qualquer momento direto na plataforma.</p>
-                    </div>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('active')">
-                    <div class="faq-question">
-                        <span>Terei acesso aos textos passados?</span>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Sim! Ao assinar, você desbloqueia o arquivo histórico completo.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="whatsapp-wrapper">
-        <div class="whatsapp-text">Fale agora conosco</div>
-        <a href="https://wa.me/5567999128212" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 35px; height: 35px; fill: #FFF;"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-        </a>
+      </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Sabedoria Revelada. Todos os direitos reservados.</p>
+    <div class="product-card reveal">
+      <div class="product-img">🎧</div>
+      <div class="product-info">
+        <h3>Mensagens em Áudio — 30 Dias</h3>
+        <p class="desc">Série de áudios diários com mensagens de direção, fé e posicionamento.</p>
+        <div class="product-price">
+          <span class="price">R$ 49,90</span>
+          <button class="add-cart" onclick="addToCart('Mensagens em Áudio 30 Dias', 49.90, '🎧')">+ Carrinho</button>
         </div>
-    </footer>
+      </div>
+    </div>
 
-    <script>
-        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: true, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false })
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-        
-        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } }); }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        window.addEventListener('scroll', () => { document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); });
+    <div class="product-card reveal">
+      <div class="product-img">
+        <span class="product-badge">Digital</span>📱
+      </div>
+      <div class="product-info">
+        <h3>E-book: Desbloqueie Sua Visão</h3>
+        <p class="desc">Guia digital com exercícios práticos para clareza e visão estratégica.</p>
+        <div class="product-price">
+          <span class="price">R$ 29,90</span>
+          <button class="add-cart" onclick="addToCart('E-book Desbloqueie Sua Visão', 29.90, '📱')">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
 
-        const doorSound = new Audio('https://actions.google.com/sounds/v1/doors/wood_door_open.ogg');
+    <div class="product-card reveal">
+      <div class="product-img">
+        <span class="product-badge">Edição Limitada</span>🎁
+      </div>
+      <div class="product-info">
+        <h3>Kit Completo de Sabedoria</h3>
+        <p class="desc">Todos os produtos + bônus exclusivos + acesso à comunidade VIP.</p>
+        <div class="product-price">
+          <span class="price">R$ 297,00</span>
+          <button class="add-cart" onclick="addToCart('Kit Completo de Sabedoria', 297.00, '🎁')">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
 
-        
-        let autoScrollRaf;
-        let isHovered = false;
-        let scrollAccumulator = 0;
-        const scrollSpeed = 0.6; // Speed per frame
+  </div>
+</section>
 
-        function autoScrollStep() {
-            const modal = document.querySelector('.scroll-modal');
-            if (!isHovered && document.body.classList.contains('portal-active') && modal.scrollTop < (modal.scrollHeight - modal.clientHeight - 50)) {
-                scrollAccumulator += scrollSpeed;
-                if (scrollAccumulator >= 1) {
-                    modal.scrollTop += Math.floor(scrollAccumulator);
-                    scrollAccumulator -= Math.floor(scrollAccumulator);
-                }
-            }
-            autoScrollRaf = requestAnimationFrame(autoScrollStep);
-        }
+<!-- VIDEO SECTION -->
+<section>
+  <div class="video-section">
+    <div class="video-box reveal-left">
+      <video autoplay muted loop playsinline>
+        <source src="chave-montagem-detalhes.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="copy-text reveal-right">
+      <div class="section-header" style="text-align:left;margin:0 0 24px;">
+        <div class="section-tag">A Experiência</div>
+        <h2 style="text-align:left;">O mistério encontra a estratégia.</h2>
+      </div>
+      <p>A chave representa aquilo que abre portas: conhecimento, sabedoria, visão, criatividade e posicionamento.</p>
+      <p>Este projeto foi desenvolvido para parecer mais uma experiência cinematográfica do que um site comum — criando sensação de profundidade, valor e transformação.</p>
+      <a class="btn btn-primary" href="#contato">Quero desbloquear meu projeto</a>
+    </div>
+  </div>
+</section>
 
-        function startAutoScroll() {
-            const modal = document.querySelector('.scroll-modal');
-            modal.scrollTop = 0; // reset scroll
-            cancelAnimationFrame(autoScrollRaf);
-            scrollAccumulator = 0;
-            
-            // Start scrolling after 4 seconds
-            setTimeout(() => {
-                autoScrollRaf = requestAnimationFrame(autoScrollStep);
-            }, 4000);
-        }
+<!-- HOW IT WORKS -->
+<section style="background:linear-gradient(180deg,rgba(214,168,79,.04),transparent);">
+  <div class="section-header reveal">
+    <div class="section-tag">Como Funciona</div>
+    <h2>Simples, rápido e transformador</h2>
+    <p>Em poucos passos você acessa o melhor conteúdo de sabedoria e transformação.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3>Escolha</h3>
+      <p>Navegue pelo catálogo e selecione os produtos que fazem sentido para você.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">2</div>
+      <h3>Adicione</h3>
+      <p>Monte seu carrinho com livros, devocionais, áudios e kits especiais.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">3</div>
+      <h3>Finalize</h3>
+      <p>Conclua seu pedido de forma simples e direta pelo WhatsApp.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">4</div>
+      <h3>Transforme</h3>
+      <p>Receba seus materiais e comece sua jornada de desbloqueio e crescimento.</p>
+    </div>
+  </div>
+</section>
 
-        document.querySelector('.scroll-modal').addEventListener('mouseenter', () => isHovered = true);
-        document.querySelector('.scroll-modal').addEventListener('mouseleave', () => isHovered = false);
-        document.querySelector('.scroll-modal').addEventListener('touchstart', () => isHovered = true);
-        document.querySelector('.scroll-modal').addEventListener('touchend', () => { setTimeout(() => isHovered=false, 2000) });
+<!-- PRICING -->
+<section id="planos">
+  <div class="section-header reveal">
+    <div class="section-tag">Planos</div>
+    <h2>Escolha seu nível de acesso</h2>
+    <p>Planos pensados para cada momento da sua jornada.</p>
+  </div>
+  <div class="pricing-toggle reveal">
+    <span class="month-label active">Mensal</span>
+    <div class="toggle-switch"></div>
+    <span class="year-label">Anual <small style="color:var(--gold);">(-20%)</small></span>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan reveal" data-monthly="29,90" data-annual="287">
+      <h3>Essencial</h3>
+      <div class="price-val"><small>R$</small>29,90</div>
+      <div class="period">/mês</div>
+      <ul>
+        <li>Devocional diário digital</li>
+        <li>1 E-book por mês</li>
+        <li>Acesso à comunidade</li>
+        <li>Newsletter exclusiva</li>
+      </ul>
+      <button class="btn btn-secondary" onclick="addToCart('Plano Essencial (Mensal)', 29.90, '⭐')">Assinar</button>
+    </div>
+    <div class="plan featured reveal" data-monthly="59,90" data-annual="575">
+      <div class="plan-badge">Recomendado</div>
+      <h3>Premium</h3>
+      <div class="price-val"><small>R$</small>59,90</div>
+      <div class="period">/mês</div>
+      <ul>
+        <li>Tudo do Essencial</li>
+        <li>Mensagens em áudio diárias</li>
+        <li>Biblioteca completa de livros</li>
+        <li>Conteúdo exclusivo semanal</li>
+        <li>Suporte prioritário</li>
+      </ul>
+      <button class="btn btn-primary" onclick="addToCart('Plano Premium (Mensal)', 59.90, '👑')">Assinar</button>
+    </div>
+    <div class="plan reveal" data-monthly="99,90" data-annual="959">
+      <h3>Exclusivo</h3>
+      <div class="price-val"><small>R$</small>99,90</div>
+      <div class="period">/mês</div>
+      <ul>
+        <li>Tudo do Premium</li>
+        <li>Mentoria mensal em grupo</li>
+        <li>Acesso vitalício ao acervo</li>
+        <li>Produtos físicos com desconto</li>
+        <li>Acesso antecipado a lançamentos</li>
+        <li>Encontros exclusivos online</li>
+      </ul>
+      <button class="btn btn-secondary" onclick="addToCart('Plano Exclusivo (Mensal)', 99.90, '💎')">Assinar</button>
+    </div>
+  </div>
+</section>
 
-        function turnKey(e) {
-            e.preventDefault();
-            const wrapper = document.querySelector('.hero-key-wrapper');
-            const tooltip = document.getElementById('keyTooltip');
-            const h1 = document.getElementById('heroH1');
-            const p = document.getElementById('heroP');
-            
-            // Start turn animation
-            wrapper.classList.add('is-turning');
-            tooltip.style.opacity = '0';
-            
-            // Fade in the closed doors
-            setTimeout(() => {
-                document.body.classList.add('portal-visible');
-            }, 400);
+<!-- TESTIMONIALS -->
+<section id="testemunhos" style="background:linear-gradient(180deg,rgba(214,168,79,.04),transparent);">
+  <div class="section-header reveal">
+    <div class="section-tag">Testemunhos</div>
+    <h2>Quem usa sente a diferença</h2>
+    <p>Depoimentos de pessoas impactadas pela experiência, clareza e transformação.</p>
+  </div>
+  <div class="testimonials">
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <p class="quote">"Parece uma marca internacional. A experiência visual e emocional desse projeto é absurda."</p>
+      <div class="person">
+        <div class="avatar">M</div>
+        <div><strong>Marcos Silva</strong><br><small>Empresário</small></div>
+      </div>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <p class="quote">"Não parece um site comum. Parece uma experiência cinematográfica premium."</p>
+      <div class="person">
+        <div class="avatar">A</div>
+        <div><strong>Ana Ribeiro</strong><br><small>Mentora</small></div>
+      </div>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <p class="quote">"A linguagem visual, a chave e toda a atmosfera transmitem profundidade e autoridade."</p>
+      <div class="person">
+        <div class="avatar">L</div>
+        <div><strong>Lucas Almeida</strong><br><small>Designer</small></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            // Open the doors to reveal scroll
-            setTimeout(() => {
-                document.body.classList.add('portal-active');
-                startAutoScroll();
-                doorSound.play().catch(err => console.log('Audio auto-play blocked', err));
-            }, 800);
-        }
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header reveal">
+    <div class="section-tag" data-i18n="faq-tag">Dúvidas</div>
+    <h2 data-i18n="faq-title">Perguntas Frequentes</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <div class="faq-q">Como recebo os produtos digitais? <span class="icon">+</span></div>
+      <div class="faq-a"><p>Após a confirmação do pagamento, você recebe acesso imediato por e-mail e WhatsApp com links de download e acesso à plataforma.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">Os produtos físicos têm frete? <span class="icon">+</span></div>
+      <div class="faq-a"><p>Sim, o frete é calculado no momento da finalização do pedido via WhatsApp, de acordo com sua localização.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">Posso cancelar meu plano? <span class="icon">+</span></div>
+      <div class="faq-a"><p>Sim, todos os planos podem ser cancelados a qualquer momento sem multa. Você mantém o acesso até o fim do período pago.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">Existe garantia de satisfação? <span class="icon">+</span></div>
+      <div class="faq-a"><p>Sim! Oferecemos 7 dias de garantia incondicional. Se não estiver satisfeito, devolvemos 100% do valor.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">Como funciona a mentoria do plano Exclusivo? <span class="icon">+</span></div>
+      <div class="faq-a"><p>A mentoria acontece em encontros mensais em grupo via Zoom, com espaço para perguntas, direcionamento e estratégia personalizada.</p></div>
+    </div>
+  </div>
+</section>
 
-        function closePortal() {
-            document.body.classList.remove('portal-active');
-            cancelAnimationFrame(autoScrollRaf);
-            document.body.classList.remove('portal-visible');
-            const wrapper = document.querySelector('.hero-key-wrapper');
-            const tooltip = document.getElementById('keyTooltip');
-            const h1 = document.getElementById('heroH1');
-            const p = document.getElementById('heroP');
-            
-            // Reset key after door closes
-            setTimeout(() => {
-                wrapper.classList.remove('is-turning');
-                tooltip.style.opacity = '1';
-                h1.style.opacity = '1';
-                p.style.opacity = '1';
-            }, 500);
-        }
-    </script>
+<!-- TRUST BADGES -->
+<div class="trust-badges reveal">
+  <div class="trust-item"><span class="icon">🔒</span>Compra Segura</div>
+  <div class="trust-item"><span class="icon">✅</span>Garantia 7 Dias</div>
+  <div class="trust-item"><span class="icon">⚡</span>Acesso Imediato</div>
+  <div class="trust-item"><span class="icon">💬</span>Suporte Humano</div>
+</div>
+
+<!-- NEWSLETTER -->
+<section>
+  <div class="newsletter reveal">
+    <h2>Receba a primeira chave grátis</h2>
+    <p>Inscreva-se e receba conteúdo exclusivo de sabedoria direto no seu e-mail.</p>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Seu melhor e-mail" required>
+      <button class="btn btn-primary" type="submit">Receber</button>
+    </form>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contato" style="text-align:center;">
+  <div class="section-header reveal">
+    <div class="section-tag" data-i18n="contact-tag">Contato</div>
+    <h2 data-i18n="contact-title">Pronto para desbloquear algo maior?</h2>
+    <p>Fale diretamente conosco pelo WhatsApp ou explore nossos produtos e planos.</p>
+    <br>
+    <a class="btn btn-primary" href="https://wa.me/5567999128212" target="_blank">Falar no WhatsApp</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Chaves de Sabedoria</h4>
+      <p>Uma experiência premium de transformação espiritual, posicionamento e crescimento. Cada chave abre uma nova dimensão.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <a href="#chaves">As Chaves</a>
+      <a href="#produtos">Loja</a>
+      <a href="#planos">Planos</a>
+      <a href="#testemunhos">Testemunhos</a>
+    </div>
+    <div class="footer-col">
+      <h4>Suporte</h4>
+      <a href="#faq">FAQ</a>
+      <a href="https://wa.me/5567999128212" target="_blank">WhatsApp</a>
+      <a href="#contato">Contato</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Termos de Uso</a>
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Política de Reembolso</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 • Chaves de Sabedoria • Todos os direitos reservados.
+  </div>
+</footer>
+
+<!-- FLOATING BUTTONS -->
+<a class="whatsapp-float" href="https://wa.me/5567999128212" target="_blank" aria-label="WhatsApp">💬</a>
+<button class="back-top" aria-label="Voltar ao topo">↑</button>
+
+<script src="script.js"></script>
 </body>
 </html>
