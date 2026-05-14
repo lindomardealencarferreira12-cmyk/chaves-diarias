@@ -215,17 +215,127 @@ footer{padding:50px 5vw 30px;border-top:1px solid var(--card-border);}
 .keys-grid,.products-grid,.pricing-grid,.steps{grid-template-columns:repeat(2,1fr);}
 .impact-grid{grid-template-columns:repeat(2,1fr);gap:30px;}
 .footer-grid{grid-template-columns:1fr 1fr;}
+.hero-title{font-size:clamp(44px,6vw,80px);}
+.hero-sub{font-size:clamp(16px,2vw,22px);}
+section{padding:80px 5vw;}
 }
+
 @media(max-width:768px){
+/* NAV MOBILE */
+nav{padding:14px 4vw;gap:8px;}
+nav.scrolled{padding:10px 4vw;}
+.logo{font-size:18px;letter-spacing:2px;}
 .nav-links{display:none;}
 .hamburger{display:flex;}
-.mobile-menu{display:flex;}
-.keys-grid,.products-grid,.pricing-grid,.testimonials,.steps,.impact-grid{grid-template-columns:1fr;}
-.video-section{grid-template-columns:1fr;}
-.hero-title{font-size:clamp(40px,10vw,64px);}
-.footer-grid{grid-template-columns:1fr;}
-.plan.featured{transform:none;}
-.newsletter{padding:36px 24px;}
-.newsletter-form{flex-direction:column;align-items:center;}
+.nav-actions{gap:10px;}
+.lang-btn{padding:5px 8px;font-size:11px;}
+.flag-img{width:16px;height:11px;}
+
+/* MOBILE MENU - Glassmorphism */
+.mobile-menu{display:flex;backdrop-filter:blur(20px);background:rgba(6,6,6,.95);}
+.mobile-menu a{font-size:24px;letter-spacing:2px;}
+
+/* HERO MOBILE */
+header{min-height:100svh;padding:100px 5vw 60px;}
+.hero-title{font-size:clamp(36px,9vw,56px);line-height:.92;margin-bottom:20px;}
+.hero-sub{font-size:16px;line-height:1.5;margin-bottom:28px;}
+.buttons{flex-direction:column;align-items:center;gap:12px;width:100%;}
+.btn{width:100%;max-width:360px;text-align:center;padding:15px 24px;font-size:12px;letter-spacing:1.5px;}
+.btn-substack{justify-content:center;}
+
+/* SECTIONS MOBILE */
+section{padding:60px 5vw;}
+.section-header{margin-bottom:36px;}
+.section-header h2{font-size:clamp(26px,6vw,40px);margin-bottom:12px;}
+.section-header p{font-size:15px;}
+.section-tag{font-size:11px;letter-spacing:4px;margin-bottom:10px;}
+
+/* IMPACT MOBILE */
+.impact-grid{grid-template-columns:repeat(2,1fr);gap:16px;}
+.impact-item h3{font-size:clamp(28px,7vw,40px);}
+.impact-item p{font-size:12px;letter-spacing:1px;}
+
+/* KEYS MOBILE */
+.keys-grid{grid-template-columns:1fr;gap:16px;}
+.key-card{padding:24px;min-height:auto;}
+.key-card h3{font-size:20px;}
+.key-card p{font-size:14px;}
+.key-icon{font-size:30px;margin-bottom:14px;}
+
+/* PRODUCTS MOBILE */
+.products-grid{grid-template-columns:1fr;gap:16px;}
+.product-img{height:180px;font-size:48px;}
+.product-info{padding:20px;}
+.product-info h3{font-size:18px;}
+.product-price .price{font-size:20px;}
+.add-cart{padding:10px 16px;font-size:11px;}
+
+/* VIDEO SECTION MOBILE */
+.video-section{grid-template-columns:1fr;gap:30px;}
+.copy-text p{font-size:15px;}
+
+/* STEPS MOBILE */
+.steps{grid-template-columns:1fr;gap:16px;}
+.step{padding:24px 16px;}
+.step-num{width:44px;height:44px;font-size:18px;}
+
+/* PRICING MOBILE */
+.pricing-grid{grid-template-columns:1fr;gap:16px;}
+.plan{padding:28px;}
+.plan.featured{transform:none;box-shadow:0 10px 40px rgba(214,168,79,.12);}
+.plan .price-val{font-size:40px;}
+.plan ul li{font-size:13px;}
+.pricing-toggle{margin-bottom:28px;}
+
+/* TESTIMONIALS MOBILE */
+.testimonials{grid-template-columns:1fr;gap:16px;}
+.testimonial{padding:24px;}
+.testimonial .quote{font-size:14px;margin-bottom:18px;}
+
+/* FAQ MOBILE */
+.faq-q{font-size:16px;padding:18px 0;}
+.faq-a p{font-size:14px;}
+.faq-item.open .faq-a{max-height:250px;}
+
+/* NEWSLETTER MOBILE */
+.newsletter{padding:32px 20px;margin:0 -1vw;}
+.newsletter h2{font-size:24px;}
+.newsletter p{font-size:14px;margin-bottom:20px;}
+.newsletter-form{flex-direction:column;align-items:stretch;}
 .newsletter-form input{max-width:100%;width:100%;}
+.newsletter-form .btn{width:100%;}
+
+/* TRUST MOBILE */
+.trust-badges{gap:24px;padding:30px 5vw;}
+.trust-item{font-size:12px;}
+
+/* FOOTER MOBILE */
+.footer-grid{grid-template-columns:1fr;gap:24px;margin-bottom:24px;}
+.footer-col{text-align:center;}
+footer{padding:36px 5vw 20px;}
+
+/* FLOATING BUTTONS - prevent overlap */
+.whatsapp-float{width:54px;height:54px;font-size:26px;bottom:20px;right:16px;}
+.back-top{width:40px;height:40px;font-size:16px;bottom:20px;left:16px;}
+
+/* CART MOBILE */
+.cart-sidebar{width:100%;max-width:100vw;right:-100%;padding:20px;}
+.cart-header h3{font-size:20px;}
+
+/* WATERMARK - adjust for mobile */
+.watermark-cover{width:200px;height:50px;}
+}
+
+/* VERY SMALL SCREENS */
+@media(max-width:380px){
+.hero-title{font-size:32px;}
+.logo{font-size:15px;letter-spacing:1px;}
+.lang-btn{padding:4px 6px;font-size:10px;}
+.flag-img{width:14px;height:10px;}
+.btn{padding:13px 20px;font-size:11px;}
+.impact-grid{grid-template-columns:1fr 1fr;}
+.impact-item h3{font-size:24px;}
+section{padding:48px 4vw;}
+.section-header h2{font-size:24px;}
+.plan .price-val{font-size:34px;}
 }
