@@ -70,6 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ========== PRODUCT FILTER TABS ==========
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.product-card').forEach(card => {
+        if (filter === 'todos' || card.dataset.category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
   // ========== PRICING TOGGLE ==========
   const toggle = document.querySelector('.toggle-switch');
   const monthLabel = document.querySelector('.month-label');

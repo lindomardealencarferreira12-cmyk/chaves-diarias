@@ -149,58 +149,75 @@
   </div>
 </section>
 
-<!-- PRODUCTS -->
+<!-- BIBLIOTECA -->
 <section id="produtos" style="background:linear-gradient(180deg,rgba(214,168,79,.04),transparent);">
   <div class="section-header reveal">
-    <div class="section-tag" data-i18n="products-tag">Loja</div>
-    <h2 data-i18n="products-title">Produtos Selecionados</h2>
+    <div class="section-tag" data-i18n="products-tag">Biblioteca</div>
+    <h2 data-i18n="products-title">Explore Nosso Acervo</h2>
     <p data-i18n="products-desc">Recursos premium para aprofundar sua jornada de sabedoria e transformação.</p>
   </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs reveal">
+    <button class="filter-btn active" data-filter="todos">Todos</button>
+    <button class="filter-btn" data-filter="roteiros">📋 Roteiros de Células</button>
+    <button class="filter-btn" data-filter="mensagens">🕊️ Mensagens</button>
+    <button class="filter-btn" data-filter="biblias">📖 Bíblias</button>
+    <button class="filter-btn" data-filter="livros">📚 Livros</button>
+    <button class="filter-btn" data-filter="materiais">📦 Materiais</button>
+  </div>
+
   <div class="products-grid">
 
-    <div class="product-card reveal">
+    <!-- ROTEIROS DE CÉLULAS -->
+    <div class="product-card reveal" data-category="roteiros">
       <div class="product-img">
-        <span class="product-badge">Mais Vendido</span>📖
+        <span class="product-badge">Semanal</span>📋
       </div>
       <div class="product-info">
-        <h3>Bíblia de Estudo Transformação</h3>
-        <p class="desc">Edição premium com comentários, mapas e guias de estudo aprofundado.</p>
+        <span class="product-cat">Roteiros de Células</span>
+        <h3>Roteiro Semanal — Célula</h3>
+        <p class="desc">Roteiro completo com quebra-gelo, louvor, texto base, perguntas e oração.</p>
         <div class="product-price">
-          <span class="price">R$ 189,90</span>
-          <button class="add-cart" onclick="addToCart('Bíblia de Estudo Transformação', 189.90, '📖')">+ Carrinho</button>
+          <span class="price">Grátis</span>
+          <button class="add-cart" onclick="addToCart('Roteiro Semanal', 0, '📋')">Baixar</button>
         </div>
       </div>
     </div>
 
-    <div class="product-card reveal">
+    <div class="product-card reveal" data-category="roteiros">
+      <div class="product-img">📋</div>
+      <div class="product-info">
+        <span class="product-cat">Roteiros de Células</span>
+        <h3>Pack Mensal — 4 Roteiros</h3>
+        <p class="desc">Pacote com 4 roteiros temáticos para um mês completo de células.</p>
+        <div class="product-price">
+          <span class="price">R$ 19,90</span>
+          <button class="add-cart" onclick="addToCart('Pack Mensal 4 Roteiros', 19.90, '📋')">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MENSAGENS -->
+    <div class="product-card reveal" data-category="mensagens">
       <div class="product-img">
-        <span class="product-badge">Novo</span>📕
+        <span class="product-badge">Novo</span>🕊️
       </div>
       <div class="product-info">
+        <span class="product-cat">Mensagens</span>
         <h3>Devocional 365 Chaves</h3>
         <p class="desc">Um ano inteiro de reflexões diárias com sabedoria prática e espiritual.</p>
         <div class="product-price">
           <span class="price">R$ 79,90</span>
-          <button class="add-cart" onclick="addToCart('Devocional 365 Chaves', 79.90, '📕')">+ Carrinho</button>
+          <button class="add-cart" onclick="addToCart('Devocional 365 Chaves', 79.90, '🕊️')">+ Carrinho</button>
         </div>
       </div>
     </div>
 
-    <div class="product-card reveal">
-      <div class="product-img">📗</div>
-      <div class="product-info">
-        <h3>Livro: O Poder das Chaves</h3>
-        <p class="desc">Princípios de sabedoria para desbloquear portas no pessoal e profissional.</p>
-        <div class="product-price">
-          <span class="price">R$ 59,90</span>
-          <button class="add-cart" onclick="addToCart('O Poder das Chaves', 59.90, '📗')">+ Carrinho</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product-card reveal">
+    <div class="product-card reveal" data-category="mensagens">
       <div class="product-img">🎧</div>
       <div class="product-info">
+        <span class="product-cat">Mensagens</span>
         <h3>Mensagens em Áudio — 30 Dias</h3>
         <p class="desc">Série de áudios diários com mensagens de direção, fé e posicionamento.</p>
         <div class="product-price">
@@ -210,11 +227,55 @@
       </div>
     </div>
 
-    <div class="product-card reveal">
+    <!-- BÍBLIAS -->
+    <div class="product-card reveal" data-category="biblias">
+      <div class="product-img">
+        <span class="product-badge">Mais Vendido</span>📖
+      </div>
+      <div class="product-info">
+        <span class="product-cat">Bíblias</span>
+        <h3>Bíblia de Estudo Transformação</h3>
+        <p class="desc">Edição premium com comentários, mapas e guias de estudo aprofundado.</p>
+        <div class="product-price">
+          <span class="price">R$ 189,90</span>
+          <button class="add-cart" onclick="addToCart('Bíblia de Estudo Transformação', 189.90, '📖')">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="biblias">
+      <div class="product-img">📖</div>
+      <div class="product-info">
+        <span class="product-cat">Bíblias</span>
+        <h3>Bíblia Sagrada — Capa Premium</h3>
+        <p class="desc">Edição clássica com capa de couro sintético e letras grandes.</p>
+        <div class="product-price">
+          <span class="price">R$ 129,90</span>
+          <button class="add-cart" onclick="addToCart('Bíblia Sagrada Capa Premium', 129.90, '📖')">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVROS -->
+    <div class="product-card reveal" data-category="livros">
+      <div class="product-img">📗</div>
+      <div class="product-info">
+        <span class="product-cat">Livros</span>
+        <h3>Livro: O Poder das Chaves</h3>
+        <p class="desc">Princípios de sabedoria para desbloquear portas no pessoal e profissional.</p>
+        <div class="product-price">
+          <span class="price">R$ 59,90</span>
+          <button class="add-cart" onclick="addToCart('O Poder das Chaves', 59.90, '📗')">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="livros">
       <div class="product-img">
         <span class="product-badge">Digital</span>📱
       </div>
       <div class="product-info">
+        <span class="product-cat">Livros</span>
         <h3>E-book: Desbloqueie Sua Visão</h3>
         <p class="desc">Guia digital com exercícios práticos para clareza e visão estratégica.</p>
         <div class="product-price">
@@ -224,16 +285,31 @@
       </div>
     </div>
 
-    <div class="product-card reveal">
+    <!-- MATERIAIS -->
+    <div class="product-card reveal" data-category="materiais">
       <div class="product-img">
         <span class="product-badge">Edição Limitada</span>🎁
       </div>
       <div class="product-info">
+        <span class="product-cat">Materiais</span>
         <h3>Kit Completo de Sabedoria</h3>
         <p class="desc">Todos os produtos + bônus exclusivos + acesso à comunidade VIP.</p>
         <div class="product-price">
           <span class="price">R$ 297,00</span>
           <button class="add-cart" onclick="addToCart('Kit Completo de Sabedoria', 297.00, '🎁')">+ Carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="materiais">
+      <div class="product-img">📦</div>
+      <div class="product-info">
+        <span class="product-cat">Materiais</span>
+        <h3>Apostila: Fundamentos da Fé</h3>
+        <p class="desc">Material de estudo com 12 lições para novos convertidos e discipulado.</p>
+        <div class="product-price">
+          <span class="price">R$ 24,90</span>
+          <button class="add-cart" onclick="addToCart('Apostila Fundamentos da Fé', 24.90, '📦')">+ Carrinho</button>
         </div>
       </div>
     </div>
